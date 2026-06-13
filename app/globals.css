@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Six+Caps&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+:root {
+  --color-bg: #fef9ff;
+  --color-text: #2b2d42;
+  --color-white: #ffffff;
+  --color-pink: #ff6b9d;
+  --color-sky: #6bcbff;
+  --color-lemon: #ffd93d;
+  --color-blush: #ffb3a6;
+  --color-purple: #6c5ce7;
+  --color-mint: #a8e6cf;
+  --color-red: #e84a5f;
+  --color-card-bg: #ffffff;
+  --color-border: #2b2d42;
+}
+
+@theme inline {
+  --color-bg: var(--color-bg);
+  --color-text: var(--color-text);
+  --color-pink: var(--color-pink);
+  --color-sky: var(--color-sky);
+  --color-lemon: var(--color-lemon);
+  --color-blush: var(--color-blush);
+  --color-purple: var(--color-purple);
+  --color-mint: var(--color-mint);
+  --color-red: var(--color-red);
+  --font-display: "Six Caps", sans-serif;
+  --font-sans: "Inter", helvetica, arial, sans-serif;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  margin: 0;
+  overflow: hidden;
+}
+
+html {
+  overflow: hidden;
+}
+
+.app-card-wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 240px;
+  height: 320px;
+  border-radius: 14px;
+  will-change: transform;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.43, 0.05, 0.17, 1);
+}
+
+.app-card-wrapper:hover {
+  transform: scale(1.02);
+}
+
+.app-text-animation {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.app-text-animation-wrapper {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.app-text-animation-block {
+  opacity: 0;
+  white-space: nowrap;
+}
+
+.app-read-title {
+  display: inline-block;
+  font-family: "Six Caps", sans-serif;
+  font-size: 36px;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  color: var(--color-text);
+}
+
+.app-read-title--section {
+  font-size: 36px;
+}
+
+.app-read-title--pickup-section {
+  font-size: 36px;
+}
+
+.app-bounce-line svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@keyframes loadingFade {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.loading-dot {
+  animation: loadingFade 1s cubic-bezier(0.26, 0.16, 0.1, 1) infinite;
+}
+
+.loading-dot:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.loading-dot:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+@media (max-width: 768px) {
+  .app-card-wrapper {
+    width: 180px;
+    height: 260px;
+  }
+}

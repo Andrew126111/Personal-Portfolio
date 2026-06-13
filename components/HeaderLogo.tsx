@@ -1,0 +1,27 @@
+"use client";
+
+import { motion } from "framer-motion";
+
+const letters = "ANDREW NGUYEN".split("");
+
+export default function HeaderLogo() {
+  return (
+    <div
+      className="fixed top-8 left-8 z-40 select-none"
+      style={{ fontFamily: "Six Caps, sans-serif", fontSize: 28, color: "#302c1a", letterSpacing: "0.1em" }}
+    >
+      {letters.map((letter, i) => (
+        <motion.span
+          key={i}
+          className="inline-block overflow-hidden"
+          style={{ height: 32, width: letter === " " ? 16 : "auto" }}
+          initial={{ y: 32, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 2.2 + i * 0.04, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <span className="inline-block">{letter === " " ? "\u00A0" : letter}</span>
+        </motion.span>
+      ))}
+    </div>
+  );
+}
