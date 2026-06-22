@@ -35,7 +35,7 @@ function FidgetOrb({ color, size, baseX, baseY }: { color: string; size: number;
         opacity: 0.5,
         x,
         y,
-        zIndex: 5,
+        zIndex: 15,
         translateX: "-50%",
         translateY: "-50%",
         boxShadow: `0 0 40px ${color}44`,
@@ -130,7 +130,7 @@ export default function HeroSection({ onAboutClick }: { onAboutClick: () => void
 
         {/* Main name */}
         <motion.h1
-          className="text-[clamp(4rem,15vw,16rem)] leading-[0.82] tracking-wide -ml-1"
+          className="text-[clamp(4rem,15vw,16rem)] leading-[1.05] tracking-wide -ml-1"
           style={{ fontFamily: "Six Caps, sans-serif", color: "#2b2d42" }}
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
