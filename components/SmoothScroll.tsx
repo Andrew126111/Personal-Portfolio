@@ -1,12 +1,19 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback, ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState, useCallback, ReactNode } from "react";
 
-interface SmoothScrollProps {
-  children: ReactNode;
+interface ScrollContextValue {
+  currentY: React.MutableRefObject<number>;
+  contentHeight: number;
 }
 
-export default function SmoothScroll({ children }: SmoothScrollProps) {
+const SmoothScrollContext = createContext<ScrollContextValue | null>(null);
+
+export function useSmoothScroll() {
+  return useContext(SmoothScrollContext);
+}
+
+export default function SmoothScroll({ children }: { children: ReactNode }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState(0);
@@ -82,13 +89,12 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
   }, []);
 
   return (
-    <div style={{ overflow: "hidden", position: "relative", zIndex: 1 }}>
-      <div
-        ref={containerRef}
-        style={{ position: "relative", width: "100%" }}
-      >
-        <div ref={contentRef}>{children}</div>
+    <SmoothScrollContext.Provider value={{ currentY, contentHeight }}>
+      <div style={{ overflow: "hidden", position: "relative", zIndex: 1 }}>
+        <div ref={containerRef} style={{ position: "relative", width: "100%" }}>
+          <div ref={contentRef}>{children}</div>
+        </div>
       </div>
-    </div>
+    </SmoothScrollContext.Provider>
   );
 }

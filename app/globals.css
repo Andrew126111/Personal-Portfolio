@@ -46,16 +46,16 @@ html {
 .app-card-wrapper {
   position: relative;
   overflow: hidden;
-  width: 240px;
-  height: 320px;
-  border-radius: 14px;
+  width: 320px;
+  height: 420px;
+  border-radius: 16px;
   will-change: transform;
-  cursor: pointer;
-  transition: transform 0.25s cubic-bezier(0.43, 0.05, 0.17, 1);
+  cursor: grab;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
 }
 
-.app-card-wrapper:hover {
-  transform: scale(1.02);
+.app-card-wrapper:active {
+  cursor: grabbing;
 }
 
 .app-text-animation {
@@ -116,7 +116,7 @@ html {
 
 @media (max-width: 768px) {
   .app-card-wrapper {
-    width: 180px;
-    height: 260px;
+    width: 240px;
+    height: 340px;
   }
 }

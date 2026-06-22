@@ -27,7 +27,7 @@ export default function ProjectPage({
   return (
     <section
       className="relative w-full min-h-screen overflow-hidden flex items-center"
-      style={{ backgroundColor: bgColor }}
+      style={{ backgroundColor: bgColor, backfaceVisibility: "hidden" }}
     >
       {/* Decorative circles */}
       <motion.div
@@ -61,7 +61,14 @@ export default function ProjectPage({
         viewport={{ once: true }}
       />
 
-      <div className="relative z-10 w-full max-w-6xl mx-auto px-8 md:px-16 py-24 md:py-32">
+      <motion.div
+        className="relative z-10 w-full"
+        initial={{ clipPath: "inset(5% 0% 5% 0%)" }}
+        whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        viewport={{ once: true, margin: "-100px" }}
+      >
+      <div className="max-w-6xl mx-auto px-8 md:px-16 py-24 md:py-32">
         {/* Number */}
         <motion.div
           className="mb-6 md:mb-10 text-6xl md:text-8xl leading-none"
@@ -153,6 +160,7 @@ export default function ProjectPage({
           </svg>
         </motion.div>
       </div>
+      </motion.div>
     </section>
   );
 }

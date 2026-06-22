@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export default function ContactSection() {
   return (
-    <section className="relative w-full overflow-hidden" style={{ backgroundColor: "#ffffff" }}>
+    <section className="relative w-full overflow-hidden" style={{ backgroundColor: "#ffffff", backfaceVisibility: "hidden" }}>
       {/* Expanding circle background */}
       <motion.div
         className="absolute rounded-full"
@@ -22,7 +22,13 @@ export default function ContactSection() {
         viewport={{ once: true }}
       />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-8 md:px-16 py-32 md:py-48">
+      <motion.div
+        className="relative z-10 max-w-6xl mx-auto px-8 md:px-16 py-32 md:py-48"
+        initial={{ clipPath: "inset(5% 0% 5% 0%)" }}
+        whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        viewport={{ once: true, margin: "-100px" }}
+      >
         {/* Section heading */}
         <motion.div
           className="flex items-center gap-2 mb-12 md:mb-20"
@@ -173,7 +179,7 @@ export default function ContactSection() {
             </div>
           </motion.div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

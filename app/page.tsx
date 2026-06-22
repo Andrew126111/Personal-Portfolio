@@ -10,6 +10,7 @@ import HeroSection from "@/components/HeroSection";
 import ProjectPage from "@/components/ProjectPage";
 import ContactSection from "@/components/ContactSection";
 import PageTransition from "@/components/PageTransition";
+import ParallaxSection from "@/components/ParallaxSection";
 
 const projects = [
   {
@@ -73,20 +74,25 @@ export default function Home() {
           <SmoothScroll>
             <HeroSection onAboutClick={handleAboutClick} />
 
-            {projects.map((p) => (
-              <ProjectPage
-                key={p.num}
-                num={p.num}
-                title={p.title}
-                description={p.description}
-                tags={p.tags}
-                bgColor={p.bgColor}
-                accentColor={p.accentColor}
-                circleColor={p.circleColor}
-              />
+            {projects.map((p, i) => (
+              <ParallaxSection key={p.num} speed={0.2 + i * 0.1}>
+                <div style={i > 0 ? { marginTop: "-2px" } : undefined}>
+                  <ProjectPage
+                    num={p.num}
+                    title={p.title}
+                    description={p.description}
+                    tags={p.tags}
+                    bgColor={p.bgColor}
+                    accentColor={p.accentColor}
+                    circleColor={p.circleColor}
+                  />
+                </div>
+              </ParallaxSection>
             ))}
 
-            <ContactSection />
+            <ParallaxSection speed={0.15}>
+              <ContactSection />
+            </ParallaxSection>
           </SmoothScroll>
         </>
       )}
