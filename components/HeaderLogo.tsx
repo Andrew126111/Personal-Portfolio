@@ -8,14 +8,21 @@ export default function HeaderLogo() {
   return (
     <div
       className="fixed top-8 left-8 z-40 select-none"
-      style={{ fontFamily: "Six Caps, sans-serif", fontSize: 28, color: "#302c1a", letterSpacing: "0.1em" }}
+      style={{
+        fontFamily: "Six Caps, sans-serif",
+        fontSize: 34,
+        color: "#2b2d42",
+        letterSpacing: "0.12em",
+        textRendering: "optimizeLegibility",
+        WebkitFontSmoothing: "antialiased",
+      }}
     >
       {letters.map((letter, i) => (
         <motion.span
           key={i}
           className="inline-block overflow-hidden"
-          style={{ height: 32, width: letter === " " ? 16 : "auto" }}
-          initial={{ y: 32, opacity: 0 }}
+          style={{ height: 36, width: letter === " " ? 18 : "auto" }}
+          initial={{ y: 36, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 2.2 + i * 0.04, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >

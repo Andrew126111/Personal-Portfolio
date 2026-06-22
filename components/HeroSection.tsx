@@ -1,18 +1,61 @@
 "use client";
 
 import { useCallback, useRef, useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionValue, useSpring, animate } from "framer-motion";
 import AboutCard from "./AboutCard";
-
-const skillTags = [
-  "REACT", "NEXT.JS", "TYPESCRIPT", "CSS", "PYTHON",
-  "NODE.JS", "FRAMER", "TAILWIND", "GIT", "POSTGRES",
-];
 
 const LINE_COUNT = 3;
 const LINE_BASE_Y = [30, 45, 60];
 const LINE_AMPLITUDE = [40, 30, 20];
 const LINE_PHASE = [0, 0.3, 0.6];
+
+const fidgetOrbs = [
+  { color: "#ff6b9d", size: 70, x: 0, y: 0, baseX: 0, baseY: 0 },
+  { color: "#a8e6cf", size: 55, x: 0, y: 0, baseX: 0, baseY: 0 },
+  { color: "#ffd93d", size: 60, x: 0, y: 0, baseX: 0, baseY: 0 },
+  { color: "#6bcbff", size: 45, x: 0, y: 0, baseX: 0, baseY: 0 },
+];
+
+function FidgetOrb({ color, size, baseX, baseY }: { color: string; size: number; baseX: number; baseY: number }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const handleDragEnd = useCallback(
+    (_: unknown, info: { velocity: { x: number; y: number } }) => {
+      const endX = x.get() + info.velocity.x * 4;
+      const endY = y.get() + info.velocity.y * 4;
+      const clampedX = Math.max(-80, Math.min(80, endX));
+      const clampedY = Math.max(-80, Math.min(80, endY));
+      animate(x, clampedX, { type: "spring", stiffness: 120, damping: 18 });
+      animate(y, clampedY, { type: "spring", stiffness: 120, damping: 18 });
+    },
+    [x, y]
+  );
+
+  return (
+    <motion.div
+      className="absolute rounded-full cursor-grab active:cursor-grabbing"
+      style={{
+        width: size,
+        height: size,
+        left: baseX,
+        top: baseY,
+        backgroundColor: color,
+        opacity: 0.35,
+        x,
+        y,
+        zIndex: 5,
+      }}
+      drag
+      dragMomentum={false}
+      onDragEnd={handleDragEnd}
+      whileHover={{ scale: 1.3, opacity: 0.55, transition: { duration: 0.3 } }}
+      initial={{ scale: 0, opacity: 0 }}
+      whileInView={{ scale: 1, opacity: 0.35 }}
+      transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+    />
+  );
+}
 
 export default function HeroSection({ onAboutClick }: { onAboutClick: () => void }) {
   const mouseX = useMotionValue(0.5);
@@ -99,20 +142,12 @@ export default function HeroSection({ onAboutClick }: { onAboutClick: () => void
         whileInView={{ scale: 1 }}
         transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
       />
-      <motion.div
-        className="absolute rounded-full pointer-events-none"
-        style={{ width: 250, height: 250, top: "50%", left: "40%", backgroundColor: "#6bcbff", opacity: 0.06 }}
-        initial={{ scale: 0 }}
-        whileInView={{ scale: 1 }}
-        transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      />
-      <motion.div
-        className="absolute rounded-full pointer-events-none"
-        style={{ width: 200, height: 200, bottom: "25%", right: "30%", backgroundColor: "#a8e6cf", opacity: 0.1 }}
-        initial={{ scale: 0 }}
-        whileInView={{ scale: 1 }}
-        transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      />
+
+      {/* Fidget orbs - interactive floating bubbles */}
+      <FidgetOrb color="#ff6b9d" size={70} baseX={65} baseY={20} />
+      <FidgetOrb color="#a8e6cf" size={55} baseX={5} baseY={55} />
+      <FidgetOrb color="#ffd93d" size={60} baseX={80} baseY={40} />
+      <FidgetOrb color="#6bcbff" size={45} baseX={88} baseY={72} />
 
       {/* Hero content */}
       <div className="relative z-10 flex flex-col justify-center min-h-screen px-8 md:px-16 lg:px-24">
@@ -203,7 +238,7 @@ export default function HeroSection({ onAboutClick }: { onAboutClick: () => void
           </motion.div>
         </div>
 
-        {/* Personal bio filler - floating intro card */}
+        {/* Personal bio filler */}
         <motion.div
           className="absolute bottom-20 left-8 md:left-16 lg:left-24 max-w-xs"
           initial={{ opacity: 0, y: 20 }}
@@ -227,74 +262,7 @@ export default function HeroSection({ onAboutClick }: { onAboutClick: () => void
             </p>
           </div>
         </motion.div>
-
-        {/* Decorative skill tags */}
-        <motion.div
-          className="absolute bottom-8 right-8 md:right-16 lg:right-24 flex flex-wrap gap-2 max-w-xs justify-end"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.3 }}
-        >
-          {skillTags.slice(0, 5).map((tag, i) => (
-            <span
-              key={tag}
-              className="text-[10px] tracking-[0.15em] px-2 py-0.5"
-              style={{
-                fontFamily: "Inter, sans-serif",
-                color: "#2b2d42",
-                opacity: 0.2 + i * 0.04,
-                border: "1px solid #2b2d42",
-                borderRadius: 2,
-              }}
-            >
-              {tag}
-            </span>
-          ))}
-        </motion.div>
       </div>
-
-      {/* Animated arrow pointing to the about card */}
-      <motion.div
-        className="absolute pointer-events-none select-none z-30"
-        style={{ top: "22%", right: "calc(6% + 340px)" }}
-        initial={{ opacity: 0, x: -20 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6, delay: 1.5 }}
-      >
-        <motion.div
-          className="flex flex-col items-center gap-1"
-          animate={{ x: [0, 8, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <span
-            className="text-xs md:text-sm font-semibold tracking-[0.2em]"
-            style={{
-              fontFamily: "Six Caps, sans-serif",
-              color: "#ff6b9d",
-              textShadow: "0 0 20px rgba(255,107,157,0.5)",
-            }}
-          >
-            CLICK ME
-          </span>
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            <path
-              d="M10 10 L18 14 L10 18"
-              stroke="#ff6b9d"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              fill="none"
-            />
-            <circle
-              cx="18" cy="14" r="8"
-              stroke="#ff6b9d"
-              strokeWidth="1.5"
-              fill="none"
-              opacity={0.4}
-            />
-          </svg>
-        </motion.div>
-      </motion.div>
 
       {/* Draggable About Card */}
       <AboutCard onNavigate={onAboutClick} />

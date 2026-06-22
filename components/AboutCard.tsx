@@ -12,13 +12,11 @@ export default function AboutCard({ onNavigate }: AboutCardProps) {
   const y = useMotionValue(0);
   const rotate = useMotionValue(6);
   const moved = useRef(false);
-  const dragEnded = useRef(false);
 
   const springRotate = useSpring(rotate, { stiffness: 200, damping: 20 });
 
   const handleDragStart = useCallback(() => {
     moved.current = false;
-    dragEnded.current = false;
   }, []);
 
   const handleDrag = useCallback(
@@ -33,7 +31,6 @@ export default function AboutCard({ onNavigate }: AboutCardProps) {
 
   const handleDragEnd = useCallback(
     (_: unknown, info: { offset: { x: number; y: number }; velocity: { x: number; y: number } }) => {
-      dragEnded.current = true;
       const endX = x.get() + info.velocity.x * 8;
       const endY = y.get() + info.velocity.y * 8;
       const boundedX = Math.max(-500, Math.min(500, endX));
@@ -76,6 +73,45 @@ export default function AboutCard({ onNavigate }: AboutCardProps) {
       transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
       whileHover={{ scale: 1.03 }}
     >
+      {/* Arrow indicator - positioned left of card, follows drag */}
+      <motion.div
+        className="absolute pointer-events-none select-none"
+        style={{ right: "calc(100% + 16px)", top: "50%", translateY: "-50%" }}
+        animate={{ x: [0, 10, 0] }}
+        transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <div className="flex flex-col items-center gap-2">
+          <span
+            className="text-sm md:text-base font-semibold tracking-[0.25em] whitespace-nowrap"
+            style={{
+              fontFamily: "Six Caps, sans-serif",
+              color: "#ff6b9d",
+              textShadow: "0 0 24px rgba(255,107,157,0.6)",
+            }}
+          >
+            CLICK ME
+          </span>
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <path
+              d="M14 12 L26 20 L14 28"
+              stroke="#ff6b9d"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              fill="none"
+            />
+            <circle
+              cx="26" cy="20" r="11"
+              stroke="#ff6b9d"
+              strokeWidth="1.5"
+              fill="none"
+              opacity={0.35}
+            />
+          </svg>
+        </div>
+      </motion.div>
+
+      {/* Card content */}
       <div
         className="w-full h-full flex flex-col p-6 md:p-7"
         style={{ fontFamily: "Six Caps, sans-serif", color: "#2b2d42" }}
