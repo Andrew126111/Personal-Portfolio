@@ -1,33 +1,24 @@
 "use client";
 
 import { useCallback, useRef, useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring, animate } from "framer-motion";
+import { motion, useMotionValue, animate } from "framer-motion";
 import AboutCard from "./AboutCard";
 
-const LINE_COUNT = 3;
-const LINE_BASE_Y = [30, 45, 60];
-const LINE_AMPLITUDE = [40, 30, 20];
-const LINE_PHASE = [0, 0.3, 0.6];
-
-const fidgetOrbs = [
-  { color: "#ff6b9d", size: 70, x: 0, y: 0, baseX: 0, baseY: 0 },
-  { color: "#a8e6cf", size: 55, x: 0, y: 0, baseX: 0, baseY: 0 },
-  { color: "#ffd93d", size: 60, x: 0, y: 0, baseX: 0, baseY: 0 },
-  { color: "#6bcbff", size: 45, x: 0, y: 0, baseX: 0, baseY: 0 },
+const skillTags = [
+  "REACT", "NEXT.JS", "TYPESCRIPT", "CSS", "PYTHON",
+  "NODE.JS", "FRAMER", "TAILWIND", "GIT", "POSTGRES",
 ];
 
-function FidgetOrb({ color, size, baseX, baseY }: { color: string; size: number; baseX: number; baseY: number }) {
+function FidgetOrb({ color, size, baseX, baseY }: { color: string; size: number; baseX: string; baseY: string }) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
   const handleDragEnd = useCallback(
     (_: unknown, info: { velocity: { x: number; y: number } }) => {
-      const endX = x.get() + info.velocity.x * 4;
-      const endY = y.get() + info.velocity.y * 4;
-      const clampedX = Math.max(-80, Math.min(80, endX));
-      const clampedY = Math.max(-80, Math.min(80, endY));
-      animate(x, clampedX, { type: "spring", stiffness: 120, damping: 18 });
-      animate(y, clampedY, { type: "spring", stiffness: 120, damping: 18 });
+      const endX = x.get() + info.velocity.x * 6;
+      const endY = y.get() + info.velocity.y * 6;
+      animate(x, Math.max(-120, Math.min(120, endX)), { type: "spring", stiffness: 100, damping: 15 });
+      animate(y, Math.max(-120, Math.min(120, endY)), { type: "spring", stiffness: 100, damping: 15 });
     },
     [x, y]
   );
@@ -41,71 +32,34 @@ function FidgetOrb({ color, size, baseX, baseY }: { color: string; size: number;
         left: baseX,
         top: baseY,
         backgroundColor: color,
-        opacity: 0.35,
+        opacity: 0.5,
         x,
         y,
         zIndex: 5,
+        translateX: "-50%",
+        translateY: "-50%",
+        boxShadow: `0 0 40px ${color}44`,
       }}
       drag
       dragMomentum={false}
       onDragEnd={handleDragEnd}
-      whileHover={{ scale: 1.3, opacity: 0.55, transition: { duration: 0.3 } }}
+      whileHover={{ scale: 1.4, opacity: 0.75, transition: { duration: 0.2 } }}
+      whileTap={{ scale: 0.65, opacity: 0.9, transition: { duration: 0.1 } }}
       initial={{ scale: 0, opacity: 0 }}
-      whileInView={{ scale: 1, opacity: 0.35 }}
+      whileInView={{ scale: 1, opacity: 0.5 }}
       transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
     />
   );
 }
 
 export default function HeroSection({ onAboutClick }: { onAboutClick: () => void }) {
-  const mouseX = useMotionValue(0.5);
-  const mouseY = useMotionValue(0.5);
-  const smoothMouseX = useSpring(mouseX, { stiffness: 100, damping: 25 });
-  const smoothMouseY = useSpring(mouseY, { stiffness: 100, damping: 25 });
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [linePaths, setLinePaths] = useState<string[]>(
-    Array(LINE_COUNT).fill("")
-  );
-
-  useEffect(() => {
-    const unsubX = smoothMouseX.on("change", updatePaths);
-    const unsubY = smoothMouseY.on("change", updatePaths);
-    return () => { unsubX(); unsubY(); };
-
-    function updatePaths() {
-      const mx = smoothMouseX.get();
-      const my = smoothMouseY.get();
-      const newPaths = Array.from({ length: LINE_COUNT }, (_, i) => {
-        const distFromMouse = Math.abs(my - LINE_BASE_Y[i] / 120);
-        const sensitivity = Math.max(0.3, 1 - distFromMouse * 2);
-        const amp = LINE_AMPLITUDE[i] * sensitivity;
-        const phase = LINE_PHASE[i];
-        const cp1x = 200 + mx * 300 + phase * 200;
-        const cp1y = LINE_BASE_Y[i] - amp + (mx - 0.5) * amp * 0.6;
-        return `M0,${LINE_BASE_Y[i]} Q ${cp1x},${cp1y} 500,${LINE_BASE_Y[i]} T 1000,${LINE_BASE_Y[i]}`;
-      });
-      setLinePaths(newPaths);
-    }
-  }, [smoothMouseX, smoothMouseY]);
-
-  const handlePointerMove = useCallback(
-    (e: React.PointerEvent) => {
-      if (!sectionRef.current) return;
-      const rect = sectionRef.current.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width;
-      const y = (e.clientY - rect.top) / rect.height;
-      mouseX.set(x);
-      mouseY.set(y);
-    },
-    [mouseX, mouseY]
-  );
 
   return (
     <section
       ref={sectionRef}
       className="relative min-h-screen w-full overflow-hidden"
       style={{ backgroundColor: "#fef9ff" }}
-      onPointerMove={handlePointerMove}
     >
       {/* Background watermark */}
       <div
@@ -144,10 +98,11 @@ export default function HeroSection({ onAboutClick }: { onAboutClick: () => void
       />
 
       {/* Fidget orbs - interactive floating bubbles */}
-      <FidgetOrb color="#ff6b9d" size={70} baseX={65} baseY={20} />
-      <FidgetOrb color="#a8e6cf" size={55} baseX={5} baseY={55} />
-      <FidgetOrb color="#ffd93d" size={60} baseX={80} baseY={40} />
-      <FidgetOrb color="#6bcbff" size={45} baseX={88} baseY={72} />
+      <FidgetOrb color="#ff6b9d" size={110} baseX="75%" baseY="25%" />
+      <FidgetOrb color="#a8e6cf" size={85} baseX="15%" baseY="75%" />
+      <FidgetOrb color="#ffd93d" size={95} baseX="88%" baseY="55%" />
+      <FidgetOrb color="#6bcbff" size={75} baseX="20%" baseY="15%" />
+      <FidgetOrb color="#ffb3a6" size={65} baseX="80%" baseY="80%" />
 
       {/* Hero content */}
       <div className="relative z-10 flex flex-col justify-center min-h-screen px-8 md:px-16 lg:px-24">
@@ -203,7 +158,7 @@ export default function HeroSection({ onAboutClick }: { onAboutClick: () => void
           </p>
         </motion.div>
 
-        {/* Tagline + multi-line squiggle */}
+        {/* Tagline */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mt-4 md:mt-6 gap-4">
           <motion.p
             className="text-xs md:text-sm tracking-[0.25em]"
@@ -214,28 +169,6 @@ export default function HeroSection({ onAboutClick }: { onAboutClick: () => void
           >
             STUDENT &middot; BUILDER &middot; CREATOR
           </motion.p>
-
-          {/* Multi-line mouse-following squiggles */}
-          <motion.div
-            className="w-full md:flex-1 max-w-xl ml-auto"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.9 }}
-            style={{ position: "relative", height: 80 }}
-          >
-            <svg viewBox="0 0 1000 120" fill="none" className="w-full h-full" preserveAspectRatio="none">
-              {linePaths.map((d, i) => (
-                <path
-                  key={i}
-                  d={d || `M0,${LINE_BASE_Y[i]} Q 500,${LINE_BASE_Y[i]} 1000,${LINE_BASE_Y[i]}`}
-                  stroke="#2b2d42"
-                  strokeWidth={1.5 - i * 0.3}
-                  fill="none"
-                  opacity={0.5 - i * 0.12}
-                />
-              ))}
-            </svg>
-          </motion.div>
         </div>
 
         {/* Personal bio filler */}
@@ -261,6 +194,30 @@ export default function HeroSection({ onAboutClick }: { onAboutClick: () => void
               development with Framer Motion &amp; Next.js.&rdquo;
             </p>
           </div>
+        </motion.div>
+
+        {/* Skill tags */}
+        <motion.div
+          className="absolute bottom-8 right-8 md:right-16 lg:right-24 flex flex-wrap gap-2 max-w-xs justify-end"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 1.3 }}
+        >
+          {skillTags.slice(0, 6).map((tag, i) => (
+            <span
+              key={tag}
+              className="text-[10px] tracking-[0.15em] px-2 py-0.5"
+              style={{
+                fontFamily: "Inter, sans-serif",
+                color: "#2b2d42",
+                opacity: 0.2 + i * 0.04,
+                border: "1px solid #2b2d42",
+                borderRadius: 2,
+              }}
+            >
+              {tag}
+            </span>
+          ))}
         </motion.div>
       </div>
 
