@@ -92,7 +92,7 @@ export default function ContactSection() {
             GITHUB
           </a>
           <a
-            href="https://linkedin.com/in/andrewn"
+            href="https://www.linkedin.com/in/andrew-nguyenn18"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm tracking-[0.15em] hover:underline"

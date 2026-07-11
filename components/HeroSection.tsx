@@ -154,7 +154,7 @@ export default function HeroSection({ onAboutClick }: { onAboutClick: () => void
           </p>
           <p className="text-xl md:text-3xl lg:text-4xl tracking-[0.15em]"
              style={{ fontFamily: "Six Caps, sans-serif", color: "#6bcbff" }}>
-            AT UNIVERSITY
+            AT QUEEN'S UNIVERSITY
           </p>
         </motion.div>
 
