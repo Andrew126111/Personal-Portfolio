@@ -51,7 +51,8 @@ html {
   border-radius: 16px;
   will-change: transform;
   cursor: grab;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  background-color: #ffffff;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
 }
 
 .app-card-wrapper:active {

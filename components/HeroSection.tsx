@@ -115,16 +115,16 @@ export default function HeroSection({ onAboutClick }: { onAboutClick: () => void
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            FOLIO OF
-          </motion.p>
-          <motion.p
-            className="text-lg md:text-2xl lg:text-3xl tracking-[0.15em]"
-            style={{ fontFamily: "Six Caps, sans-serif", color: "#ff6b9d" }}
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-          >
-            01/JAN.2000
+            CREATIVE
+            </motion.p>
+            <motion.p
+              className="text-lg md:text-2xl lg:text-3xl tracking-[0.15em]"
+              style={{ fontFamily: "Six Caps, sans-serif", color: "#ff6b9d" }}
+              initial={{ opacity: 0, y: 15 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+            >
+              DEVELOPER
           </motion.p>
         </div>
 
@@ -150,11 +150,11 @@ export default function HeroSection({ onAboutClick }: { onAboutClick: () => void
         >
           <p className="text-xl md:text-3xl lg:text-4xl tracking-[0.15em]"
              style={{ fontFamily: "Six Caps, sans-serif", color: "#2b2d42" }}>
-            COMPUTER SCIENCE STUDENT
+            COMPUTER SCIENCE
           </p>
           <p className="text-xl md:text-3xl lg:text-4xl tracking-[0.15em]"
              style={{ fontFamily: "Six Caps, sans-serif", color: "#6bcbff" }}>
-            AT YOUR UNIVERSITY
+            AT UNIVERSITY
           </p>
         </motion.div>
 
@@ -167,7 +167,7 @@ export default function HeroSection({ onAboutClick }: { onAboutClick: () => void
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.7 }}
           >
-            STUDENT &middot; BUILDER &middot; CREATOR
+            INTERACTION &middot; MOTION &middot; CODE
           </motion.p>
         </div>
 

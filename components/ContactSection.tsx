@@ -76,14 +76,14 @@ export default function ContactSection() {
           viewport={{ once: true }}
         >
           <a
-            href="mailto:andrew@example.com"
+            href="mailto:ng.andrew2006@gmail.com"
             className="text-sm tracking-[0.15em] hover:underline"
             style={{ fontFamily: "Inter, sans-serif", color: "#2b2d42" }}
           >
             EMAIL
           </a>
           <a
-            href="https://github.com/andrewn"
+            href="https://github.com/Andrew126111"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm tracking-[0.15em] hover:underline"
@@ -160,12 +160,12 @@ export default function ContactSection() {
                 <span className="text-sm tracking-[0.2em] opacity-70">(ANDREW NGUYEN)</span>
               </div>
               <div className="flex-1 flex flex-col items-center justify-center gap-3">
-                <a href="https://github.com/andrewn" target="_blank" rel="noopener noreferrer"
+                <a href="https://github.com/Andrew126111" target="_blank" rel="noopener noreferrer"
                    className="text-sm tracking-[0.15em] hover:underline"
                    style={{ fontFamily: "Inter, sans-serif" }}>
-                  GITHUB @ANDREWN
+                  GITHUB @ANDREW126111
                 </a>
-                <a href="mailto:andrew@example.com"
+                <a href="mailto:ng.andrew2006@gmail.com"
                    className="text-sm tracking-[0.15em] hover:underline"
                    style={{ fontFamily: "Inter, sans-serif" }}>
                   EMAIL

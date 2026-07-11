@@ -106,30 +106,28 @@ export default function AboutCard({ onNavigate }: AboutCardProps) {
       {/* Card */}
       <div className="app-card-wrapper">
         <div
-          className="w-full h-full flex flex-col p-6 md:p-7"
+          className="w-full h-full flex flex-col p-5 md:p-6"
           style={{ fontFamily: "Six Caps, sans-serif", color: "#2b2d42" }}
         >
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-3">
             <span className="text-2xl">&bull;</span>
-            <span className="text-base md:text-lg tracking-[0.2em]">ABOUT ME</span>
+            <span className="text-xl md:text-2xl tracking-[0.2em]">ABOUT ME</span>
           </div>
 
-          <div className="flex-1 flex flex-col items-center justify-center text-center px-2">
-            <p className="text-lg md:text-xl leading-relaxed tracking-wide">
-              BY THE WAY,
+          <div className="flex-1 flex flex-col items-center justify-center text-center px-1">
+            <p className="text-2xl md:text-[28px] leading-[1.1] tracking-wide">
+              WANT TO KNOW
               <br />
-              YOU CAN CLICK
-              <br />
-              THIS CARD.
+              MORE?
             </p>
-            <p className="mt-4 text-base tracking-[0.15em] opacity-80">
-              (ABOUT ME)
+            <p className="mt-4 text-lg md:text-xl tracking-[0.15em] opacity-80">
+              (CLICK HERE)
             </p>
           </div>
 
-          <div className="mt-auto pt-4 border-t border-[#2b2d42]/20">
+          <div className="mt-auto pt-3 border-t border-[#2b2d42]/20">
             <p
-              className="text-3xl tracking-[0.1em] text-center"
+              className="text-4xl md:text-5xl tracking-[0.1em] text-center"
               style={{ fontFamily: "Six Caps, sans-serif" }}
             >
               NGUYEN
