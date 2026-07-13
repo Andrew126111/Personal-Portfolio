@@ -37,7 +37,7 @@ export default function ScrollIndicator({ sectionIds }: ScrollIndicatorProps) {
   }, [sectionIds]);
 
   return (
-    <div className="fixed right-5 top-1/2 -translate-y-1/2 z-40 flex flex-col items-center gap-3 pointer-events-none">
+    <div className="fixed right-5 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center gap-3 pointer-events-none">
       {sectionIds.map((id, i) => (
         <motion.div
           key={id}

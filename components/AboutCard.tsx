@@ -116,12 +116,12 @@ export default function AboutCard({ onNavigate }: AboutCardProps) {
 
           <div className="flex-1 flex flex-col items-center justify-center text-center px-1">
             <p className="text-2xl md:text-[28px] leading-[1.1] tracking-wide">
-              WANT TO KNOW
+              MY STORY
               <br />
-              MORE?
+              FROM 2022
             </p>
             <p className="mt-4 text-lg md:text-xl tracking-[0.15em] opacity-80">
-              (CLICK HERE)
+              (READ MORE)
             </p>
           </div>
 

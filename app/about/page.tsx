@@ -7,9 +7,13 @@ import LoadingScreen from "@/components/LoadingScreen";
 import HeaderLogo from "@/components/HeaderLogo";
 import CustomCursor from "@/components/CustomCursor";
 import SmoothScroll from "@/components/SmoothScroll";
+import ParallaxSection from "@/components/ParallaxSection";
+import WatermarkReveal from "@/components/WatermarkReveal";
 import AboutSection from "@/components/AboutSection";
+import WhyIBuild from "@/components/WhyIBuild";
 import ExperienceTimeline from "@/components/ExperienceTimeline";
 import CurrentlySection from "@/components/CurrentlySection";
+import BeyondCode from "@/components/BeyondCode";
 
 export default function AboutPage() {
   const router = useRouter();
@@ -25,11 +29,31 @@ export default function AboutPage() {
           <CustomCursor loaded={loaded} />
 
           <SmoothScroll>
-            <AboutSection />
+            <ParallaxSection speed={0.15}>
+              <WatermarkReveal>
+                <AboutSection />
+              </WatermarkReveal>
+            </ParallaxSection>
 
-            <ExperienceTimeline />
+            <ParallaxSection speed={0.15}>
+              <WatermarkReveal>
+                <WhyIBuild />
+              </WatermarkReveal>
+            </ParallaxSection>
 
-            <CurrentlySection />
+            <ParallaxSection speed={0.1}>
+              <WatermarkReveal>
+                <ExperienceTimeline />
+              </WatermarkReveal>
+            </ParallaxSection>
+
+            <ParallaxSection speed={0.12}>
+              <CurrentlySection />
+            </ParallaxSection>
+
+            <ParallaxSection speed={0.1}>
+              <BeyondCode />
+            </ParallaxSection>
 
             {/* Back to Projects CTA */}
             <section className="relative w-full overflow-hidden" style={{ backgroundColor: "#fef9ff", backfaceVisibility: "hidden" }}>
