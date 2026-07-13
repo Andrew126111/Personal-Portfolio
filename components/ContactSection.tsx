@@ -39,7 +39,7 @@ export default function ContactSection({ sectionId }: { sectionId?: string }) {
           viewport={{ once: true }}
         >
           <span>・</span>
-          <span style={{ color: "#e84a5f" }}>SAY HI</span>
+          <span style={{ color: "#e84a5f" }}>GET IN TOUCH</span>
         </motion.div>
 
         {/* Contact text */}
@@ -51,8 +51,9 @@ export default function ContactSection({ sectionId }: { sectionId?: string }) {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          OPEN TO INTERNSHIPS &amp; CO-OP OPPORTUNITIES IN
+          LOOKING FOR INTERNSHIP &amp; CO-OP OPPORTUNITIES IN
           SOFTWARE ENGINEERING, FRONT-END DEVELOPMENT, AND CREATIVE TECHNOLOGY.
+          IF MY WORK RESONATES WITH YOU, I&apos;D LOVE TO HEAR FROM YOU.
         </motion.p>
 
         {/* Contact name */}
@@ -67,9 +68,9 @@ export default function ContactSection({ sectionId }: { sectionId?: string }) {
           NGUYEN
         </motion.p>
 
-        {/* Contact info */}
+        {/* Contact links */}
         <motion.div
-          className="flex flex-wrap gap-8 mb-20"
+          className="flex flex-wrap gap-8 mb-6"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
@@ -100,7 +101,26 @@ export default function ContactSection({ sectionId }: { sectionId?: string }) {
           >
             LINKEDIN
           </a>
+          <a
+            href="#"
+            className="text-sm tracking-[0.15em] hover:underline"
+            style={{ fontFamily: "Inter, sans-serif", color: "#2b2d42" }}
+          >
+            RESUME
+          </a>
         </motion.div>
+
+        {/* Closing tagline */}
+        <motion.p
+          className="text-xs tracking-[0.3em] mb-20"
+          style={{ fontFamily: "Inter, sans-serif", color: "#2b2d42", opacity: 0.25 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          viewport={{ once: true }}
+        >
+          AVAILABLE FOR INTERNSHIPS &middot; SUMMER 2025 &middot; OPEN TO RELOCATION
+        </motion.p>
 
         {/* Contact card */}
         <motion.div

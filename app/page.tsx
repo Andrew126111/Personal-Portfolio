@@ -7,7 +7,10 @@ import HeaderLogo from "@/components/HeaderLogo";
 import CustomCursor from "@/components/CustomCursor";
 import SmoothScroll from "@/components/SmoothScroll";
 import HeroSection from "@/components/HeroSection";
+import WhoAmI from "@/components/WhoAmI";
 import ProjectPage from "@/components/ProjectPage";
+import SkillsSection from "@/components/SkillsSection";
+import ExperienceTimeline from "@/components/ExperienceTimeline";
 import ContactSection from "@/components/ContactSection";
 import PageTransition from "@/components/PageTransition";
 import ParallaxSection from "@/components/ParallaxSection";
@@ -46,6 +49,8 @@ const projects = [
   },
 ];
 
+const sectionIds = ["hero", "whoami", "project-1", "project-2", "project-3", "skills", "experience", "contact"];
+
 export default function Home() {
   const router = useRouter();
   const [loaded, setLoaded] = useState(false);
@@ -71,10 +76,14 @@ export default function Home() {
           <HeaderLogo />
           <CustomCursor loaded={loaded} />
           <PageTransition active={transitioning} />
-          <ScrollIndicator sectionIds={["hero", "project-1", "project-2", "project-3", "contact"]} />
+          <ScrollIndicator sectionIds={sectionIds} />
 
           <SmoothScroll>
             <HeroSection sectionId="hero" onAboutClick={handleAboutClick} />
+
+            <ParallaxSection speed={0.15}>
+              <WhoAmI sectionId="whoami" />
+            </ParallaxSection>
 
             {projects.map((p, i) => (
               <ParallaxSection key={p.num} speed={0.2 + i * 0.1}>
@@ -92,6 +101,14 @@ export default function Home() {
                 </div>
               </ParallaxSection>
             ))}
+
+            <ParallaxSection speed={0.15}>
+              <SkillsSection sectionId="skills" />
+            </ParallaxSection>
+
+            <ParallaxSection speed={0.1}>
+              <ExperienceTimeline sectionId="experience" />
+            </ParallaxSection>
 
             <ParallaxSection speed={0.15}>
               <ContactSection sectionId="contact" />
