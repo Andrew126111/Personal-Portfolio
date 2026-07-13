@@ -15,6 +15,7 @@ import ContactSection from "@/components/ContactSection";
 import PageTransition from "@/components/PageTransition";
 import ParallaxSection from "@/components/ParallaxSection";
 import ScrollIndicator from "@/components/ScrollIndicator";
+import WatermarkReveal from "@/components/WatermarkReveal";
 
 const projects = [
   {
@@ -82,7 +83,9 @@ export default function Home() {
             <HeroSection sectionId="hero" onAboutClick={handleAboutClick} />
 
             <ParallaxSection speed={0.15}>
-              <WhoAmI sectionId="whoami" />
+              <WatermarkReveal>
+                <WhoAmI sectionId="whoami" />
+              </WatermarkReveal>
             </ParallaxSection>
 
             {projects.map((p, i) => (
@@ -97,17 +100,38 @@ export default function Home() {
                     bgColor={p.bgColor}
                     accentColor={p.accentColor}
                     circleColor={p.circleColor}
-                  />
+                  >
+                    <div className="flex flex-wrap gap-6">
+                      <a
+                        href="#"
+                        className="text-sm tracking-[0.15em] hover:opacity-60 transition-opacity"
+                        style={{ fontFamily: "Inter, sans-serif", color: p.accentColor }}
+                      >
+                        LIVE DEMO →
+                      </a>
+                      <a
+                        href="#"
+                        className="text-sm tracking-[0.15em] hover:opacity-60 transition-opacity"
+                        style={{ fontFamily: "Inter, sans-serif", color: p.accentColor }}
+                      >
+                        VIEW SOURCE →
+                      </a>
+                    </div>
+                  </ProjectPage>
                 </div>
               </ParallaxSection>
             ))}
 
             <ParallaxSection speed={0.15}>
-              <SkillsSection sectionId="skills" />
+              <WatermarkReveal>
+                <SkillsSection sectionId="skills" />
+              </WatermarkReveal>
             </ParallaxSection>
 
             <ParallaxSection speed={0.1}>
-              <ExperienceTimeline sectionId="experience" />
+              <WatermarkReveal>
+                <ExperienceTimeline sectionId="experience" />
+              </WatermarkReveal>
             </ParallaxSection>
 
             <ParallaxSection speed={0.15}>
