@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useEffect, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { motion, useMotionValue, animate } from "framer-motion";
 import AboutCard from "./AboutCard";
 
@@ -9,9 +9,10 @@ const skillTags = [
   "NODE.JS", "FRAMER", "TAILWIND", "GIT", "POSTGRES",
 ];
 
-function FidgetOrb({ color, size, baseX, baseY }: { color: string; size: number; baseX: string; baseY: string }) {
+function FidgetOrb({ color, size, baseX, baseY, label }: { color: string; size: number; baseX: string; baseY: string; label?: string }) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
+  const [hovered, setHovered] = useState(false);
 
   const handleDragEnd = useCallback(
     (_: unknown, info: { velocity: { x: number; y: number } }) => {
@@ -25,7 +26,7 @@ function FidgetOrb({ color, size, baseX, baseY }: { color: string; size: number;
 
   return (
     <motion.div
-      className="absolute rounded-full cursor-grab active:cursor-grabbing"
+      className="absolute rounded-full cursor-grab active:cursor-grabbing flex items-center justify-center"
       style={{
         width: size,
         height: size,
@@ -48,7 +49,26 @@ function FidgetOrb({ color, size, baseX, baseY }: { color: string; size: number;
       initial={{ scale: 0, opacity: 0 }}
       whileInView={{ scale: 1, opacity: 0.5 }}
       transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-    />
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+    >
+      {label && (
+        <motion.span
+          className="pointer-events-none select-none text-center leading-tight"
+          style={{
+            fontFamily: "Six Caps, sans-serif",
+            color: "#2b2d42",
+            fontSize: Math.max(11, size * 0.12),
+            letterSpacing: "0.1em",
+            opacity: 0,
+          }}
+          animate={{ opacity: hovered ? 1 : 0 }}
+          transition={{ duration: 0.15 }}
+        >
+          {label}
+        </motion.span>
+      )}
+    </motion.div>
   );
 }
 
@@ -98,11 +118,9 @@ export default function HeroSection({ onAboutClick }: { onAboutClick: () => void
       />
 
       {/* Fidget orbs - interactive floating bubbles */}
-      <FidgetOrb color="#ff6b9d" size={110} baseX="75%" baseY="25%" />
-      <FidgetOrb color="#a8e6cf" size={85} baseX="15%" baseY="75%" />
-      <FidgetOrb color="#ffd93d" size={95} baseX="88%" baseY="55%" />
-      <FidgetOrb color="#6bcbff" size={75} baseX="20%" baseY="15%" />
-      <FidgetOrb color="#ffb3a6" size={65} baseX="80%" baseY="80%" />
+      <FidgetOrb color="#ff6b9d" size={100} baseX="85%" baseY="20%" label="DRAG" />
+      <FidgetOrb color="#6bcbff" size={80} baseX="12%" baseY="70%" label="SQUISH" />
+      <FidgetOrb color="#ffd93d" size={70} baseX="90%" baseY="75%" label="POKE" />
 
       {/* Hero content */}
       <div className="relative z-10 flex flex-col justify-center min-h-screen px-8 md:px-16 lg:px-24">
@@ -171,48 +189,41 @@ export default function HeroSection({ onAboutClick }: { onAboutClick: () => void
           </motion.p>
         </div>
 
-        {/* Personal bio filler */}
+        {/* Bio quote */}
         <motion.div
-          className="absolute bottom-20 left-8 md:left-16 lg:left-24 max-w-xs"
-          initial={{ opacity: 0, y: 20 }}
+          className="mt-8 md:mt-12 max-w-md pl-4 md:pl-5"
+          style={{ borderLeft: "2px solid #6bcbff" }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 1.2 }}
+          transition={{ duration: 0.6, delay: 0.9 }}
         >
-          <div
-            className="p-4 md:p-5 rounded-xl backdrop-blur-sm"
-            style={{
-              backgroundColor: "rgba(107, 203, 255, 0.08)",
-              border: "1px solid rgba(107, 203, 255, 0.15)",
-            }}
+          <p
+            className="text-sm md:text-base leading-relaxed font-light"
+            style={{ fontFamily: "Inter, sans-serif", color: "#2b2d42", opacity: 0.6 }}
           >
-            <p
-              className="text-xs md:text-sm leading-relaxed font-light"
-              style={{ fontFamily: "Inter, sans-serif", color: "#2b2d42", opacity: 0.7 }}
-            >
-              &ldquo;Coding every day since summer &apos;22. I build things that
-              move, react, and tell a story. Currently exploring creative
-              development with Framer Motion &amp; Next.js.&rdquo;
-            </p>
-          </div>
+            &ldquo;Coding every day since summer &apos;22. I build things that
+            move, react, and tell a story. Currently exploring creative
+            development with Framer Motion &amp; Next.js.&rdquo;
+          </p>
         </motion.div>
 
         {/* Skill tags */}
         <motion.div
-          className="absolute bottom-8 right-8 md:right-16 lg:right-24 flex flex-wrap gap-2 max-w-xs justify-end"
+          className="mt-6 md:mt-8 flex flex-wrap gap-2"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.3 }}
+          transition={{ duration: 0.6, delay: 1.1 }}
         >
           {skillTags.slice(0, 6).map((tag, i) => (
             <span
               key={tag}
-              className="text-[10px] tracking-[0.15em] px-2 py-0.5"
+              className="text-xs md:text-sm tracking-[0.15em] px-3 py-1"
               style={{
                 fontFamily: "Inter, sans-serif",
                 color: "#2b2d42",
-                opacity: 0.2 + i * 0.04,
+                opacity: 0.3 + i * 0.08,
                 border: "1px solid #2b2d42",
-                borderRadius: 2,
+                borderRadius: 3,
               }}
             >
               {tag}

@@ -51,8 +51,8 @@ export default function ContactSection() {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          I AM A COMPUTER SCIENCE STUDENT FOCUSED ON CREATING THINGS WITH
-          INTERACTION &amp; ANIMATION AS MY MAIN FOCUS.
+          OPEN TO INTERNSHIPS &amp; CO-OP OPPORTUNITIES IN
+          SOFTWARE ENGINEERING, FRONT-END DEVELOPMENT, AND CREATIVE TECHNOLOGY.
         </motion.p>
 
         {/* Contact name */}
@@ -102,83 +102,42 @@ export default function ContactSection() {
           </a>
         </motion.div>
 
-        {/* Contact cards */}
-        <div className="flex flex-wrap gap-8 md:gap-16">
-          {/* Card 1: Contact */}
-          <motion.div
-            className="app-card-wrapper"
-            style={{
-              backgroundColor: "#ffb3a6",
-              rotate: -10,
-              position: "relative",
-            }}
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            viewport={{ once: true }}
+        {/* Contact card */}
+        <motion.div
+          className="app-card-wrapper"
+          style={{
+            backgroundColor: "#ffb3a6",
+            rotate: -6,
+            position: "relative",
+          }}
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          viewport={{ once: true }}
+        >
+          <a
+            href="mailto:ng.andrew2006@gmail.com"
+            className="block w-full h-full"
+            style={{ textDecoration: "none", color: "inherit" }}
           >
             <div
-              className="w-full h-full flex flex-col p-4 md:p-5"
+              className="w-full h-full flex flex-col p-5 md:p-6"
               style={{ fontFamily: "Six Caps, sans-serif", color: "#2b2d42" }}
             >
               <div className="flex items-center gap-2 mb-3">
-                <span className="text-lg">・</span>
-                <span className="text-sm tracking-[0.2em]">CONTACT</span>
+                <span className="text-xl">・</span>
+                <span className="text-base md:text-lg tracking-[0.2em]">CONTACT</span>
               </div>
               <div className="flex-1 flex flex-col items-center justify-center text-center">
-                <p className="text-base md:text-lg tracking-wide">ANDREW</p>
-                <p className="text-sm mt-3 tracking-[0.15em] opacity-70">(EMAIL ME)</p>
+                <p className="text-xl md:text-2xl tracking-wide">ANDREW</p>
+                <p className="text-base md:text-lg mt-2 tracking-[0.15em] opacity-70">(EMAIL ME)</p>
               </div>
               <div className="mt-auto pt-3 border-t border-[#2b2d42]/20 text-center">
-                <span className="text-xl tracking-[0.1em]" style={{ fontFamily: "Six Caps, sans-serif" }}>
-                  NGUYEN
-                </span>
+                <span className="text-2xl md:text-3xl tracking-[0.1em]">NGUYEN</span>
               </div>
             </div>
-          </motion.div>
-
-          {/* Card 2: Social links */}
-          <motion.div
-            className="app-card-wrapper"
-            style={{
-              backgroundColor: "#ffffff",
-              rotate: 8,
-              position: "relative",
-            }}
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            viewport={{ once: true }}
-          >
-            <div
-              className="w-full h-full flex flex-col p-4 md:p-5"
-              style={{ fontFamily: "Six Caps, sans-serif", color: "#2b2d42" }}
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-lg">・</span>
-                <span className="text-sm tracking-[0.2em]">CODED BY</span>
-                <span className="text-sm tracking-[0.2em] opacity-70">(ANDREW NGUYEN)</span>
-              </div>
-              <div className="flex-1 flex flex-col items-center justify-center gap-3">
-                <a href="https://github.com/Andrew126111" target="_blank" rel="noopener noreferrer"
-                   className="text-sm tracking-[0.15em] hover:underline"
-                   style={{ fontFamily: "Inter, sans-serif" }}>
-                  GITHUB @ANDREW126111
-                </a>
-                <a href="mailto:ng.andrew2006@gmail.com"
-                   className="text-sm tracking-[0.15em] hover:underline"
-                   style={{ fontFamily: "Inter, sans-serif" }}>
-                  EMAIL
-                </a>
-              </div>
-              <div className="mt-auto pt-3 border-t border-[#2b2d42]/20 text-center">
-                <span className="text-xl tracking-[0.1em]">
-                  NGUYEN
-                </span>
-              </div>
-            </div>
-          </motion.div>
-        </div>
+          </a>
+        </motion.div>
       </motion.div>
     </section>
   );
