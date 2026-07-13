@@ -148,17 +148,19 @@ export default function HeroSection({ onAboutClick, sectionId }: { onAboutClick:
         </div>
 
         {/* Main name */}
-        <motion.h1
-          className="text-[clamp(4rem,15vw,16rem)] leading-[1.05] tracking-wide -ml-1"
-          style={{ fontFamily: "Six Caps, sans-serif", color: "#2b2d42" }}
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-        >
-          ANDREW
-          <br />
-          NGUYEN
-        </motion.h1>
+        <div style={{ overflow: "hidden" }}>
+          <motion.h1
+            className="text-[clamp(4rem,15vw,16rem)] leading-[1.05] tracking-wide -ml-1"
+            style={{ fontFamily: "Six Caps, sans-serif", color: "#2b2d42" }}
+            initial={{ clipPath: "inset(0 0 100% 0)" }}
+            whileInView={{ clipPath: "inset(0 0 0% 0)" }}
+            transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          >
+            ANDREW
+            <br />
+            NGUYEN
+          </motion.h1>
+        </div>
 
         {/* Sub-text row */}
         <motion.div

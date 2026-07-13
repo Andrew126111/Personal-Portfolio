@@ -14,8 +14,8 @@ import ExperienceTimeline from "@/components/ExperienceTimeline";
 import ContactSection from "@/components/ContactSection";
 import PageTransition from "@/components/PageTransition";
 import ParallaxSection from "@/components/ParallaxSection";
-import ScrollIndicator from "@/components/ScrollIndicator";
-import WatermarkReveal from "@/components/WatermarkReveal";
+import ChapterNav from "@/components/ChapterNav";
+import WatermarkBackground from "@/components/WatermarkBackground";
 
 const projects = [
   {
@@ -51,6 +51,14 @@ const projects = [
 ];
 
 const sectionIds = ["hero", "whoami", "project-1", "project-2", "project-3", "skills", "experience", "contact"];
+const chapters = [
+  { num: "01", label: "IDENTITY" },
+  { num: "02", label: "PURPOSE" },
+  { num: "03", label: "PROJECTS" },
+  { num: "04", label: "SKILLS" },
+  { num: "05", label: "EXPERIENCE" },
+  { num: "06", label: "CONTACT" },
+];
 
 export default function Home() {
   const router = useRouter();
@@ -76,67 +84,52 @@ export default function Home() {
         <>
           <HeaderLogo />
           <CustomCursor loaded={loaded} />
+          <ChapterNav />
+          <WatermarkBackground />
           <PageTransition active={transitioning} />
-          <ScrollIndicator sectionIds={sectionIds} />
 
           <SmoothScroll>
             <HeroSection sectionId="hero" onAboutClick={handleAboutClick} />
 
-            <ParallaxSection speed={0.15}>
-              <WatermarkReveal>
-                <WhoAmI sectionId="whoami" />
-              </WatermarkReveal>
-            </ParallaxSection>
+            <WhoAmI sectionId="whoami" />
 
             {projects.map((p, i) => (
-              <ParallaxSection key={p.num} speed={0.2 + i * 0.1}>
-                <div style={i > 0 ? { marginTop: "-2px" } : undefined}>
-                  <ProjectPage
-                    sectionId={`project-${i + 1}`}
-                    num={p.num}
-                    title={p.title}
-                    description={p.description}
-                    tags={p.tags}
-                    bgColor={p.bgColor}
-                    accentColor={p.accentColor}
-                    circleColor={p.circleColor}
-                  >
-                    <div className="flex flex-wrap gap-6">
-                      <a
-                        href="#"
-                        className="text-sm tracking-[0.15em] hover:opacity-60 transition-opacity"
-                        style={{ fontFamily: "Inter, sans-serif", color: p.accentColor }}
-                      >
-                        LIVE DEMO →
-                      </a>
-                      <a
-                        href="#"
-                        className="text-sm tracking-[0.15em] hover:opacity-60 transition-opacity"
-                        style={{ fontFamily: "Inter, sans-serif", color: p.accentColor }}
-                      >
-                        VIEW SOURCE →
-                      </a>
-                    </div>
-                  </ProjectPage>
-                </div>
-              </ParallaxSection>
+              <div key={p.num} style={i > 0 ? { marginTop: "-2px" } : undefined}>
+                <ProjectPage
+                  sectionId={`project-${i + 1}`}
+                  num={p.num}
+                  title={p.title}
+                  description={p.description}
+                  tags={p.tags}
+                  bgColor={p.bgColor}
+                  accentColor={p.accentColor}
+                  circleColor={p.circleColor}
+                >
+                  <div className="flex flex-wrap gap-6">
+                    <a
+                      href="#"
+                      className="text-sm tracking-[0.15em] hover:opacity-60 transition-opacity"
+                      style={{ fontFamily: "Inter, sans-serif", color: p.accentColor }}
+                    >
+                      LIVE DEMO →
+                    </a>
+                    <a
+                      href="#"
+                      className="text-sm tracking-[0.15em] hover:opacity-60 transition-opacity"
+                      style={{ fontFamily: "Inter, sans-serif", color: p.accentColor }}
+                    >
+                      VIEW SOURCE →
+                    </a>
+                  </div>
+                </ProjectPage>
+              </div>
             ))}
 
-            <ParallaxSection speed={0.15}>
-              <WatermarkReveal>
-                <SkillsSection sectionId="skills" />
-              </WatermarkReveal>
-            </ParallaxSection>
+            <SkillsSection sectionId="skills" />
 
-            <ParallaxSection speed={0.1}>
-              <WatermarkReveal>
-                <ExperienceTimeline sectionId="experience" />
-              </WatermarkReveal>
-            </ParallaxSection>
+            <ExperienceTimeline sectionId="experience" />
 
-            <ParallaxSection speed={0.15}>
-              <ContactSection sectionId="contact" />
-            </ParallaxSection>
+            <ContactSection sectionId="contact" />
           </SmoothScroll>
         </>
       )}

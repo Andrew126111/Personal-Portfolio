@@ -49,16 +49,18 @@ export default function WhoAmI({ sectionId }: { sectionId?: string }) {
           </motion.div>
 
           {/* Primary text */}
-          <motion.p
-            className="text-2xl md:text-4xl lg:text-5xl leading-[1.15] font-light mb-6 md:mb-8"
-            style={{ fontFamily: "Inter, sans-serif", color: "#2b2d42", fontWeight: 300 }}
-            initial={{ opacity: 0, y: 25 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            BUILDING DIGITAL EXPERIENCES SINCE 2022
-          </motion.p>
+          <div style={{ overflow: "hidden" }}>
+            <motion.p
+              className="text-2xl md:text-4xl lg:text-5xl leading-[1.15] font-light mb-6 md:mb-8"
+              style={{ fontFamily: "Inter, sans-serif", color: "#2b2d42", fontWeight: 300 }}
+              initial={{ clipPath: "inset(0 0 100% 0)" }}
+              whileInView={{ clipPath: "inset(0 0 0% 0)" }}
+              transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ once: true, margin: "-100px" }}
+            >
+              BUILDING DIGITAL EXPERIENCES SINCE 2022
+            </motion.p>
+          </div>
 
           {/* Divider line */}
           <motion.div
@@ -71,28 +73,32 @@ export default function WhoAmI({ sectionId }: { sectionId?: string }) {
           />
 
           {/* Description */}
-          <motion.p
-            className="text-base md:text-lg leading-relaxed font-light max-w-2xl mb-4"
-            style={{ fontFamily: "Inter, sans-serif", color: "#2b2d42", opacity: 0.65 }}
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            COMPUTER SCIENCE STUDENT AT QUEEN&apos;S UNIVERSITY.
-          </motion.p>
+          <div style={{ overflow: "hidden" }}>
+            <motion.p
+              className="text-base md:text-lg leading-relaxed font-light max-w-2xl mb-4"
+              style={{ fontFamily: "Inter, sans-serif", color: "#2b2d42", opacity: 0.65 }}
+              initial={{ clipPath: "inset(0 0 100% 0)" }}
+              whileInView={{ clipPath: "inset(0 0 0% 0)" }}
+              transition={{ duration: 0.7, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ once: true, margin: "-100px" }}
+            >
+              COMPUTER SCIENCE STUDENT AT QUEEN&apos;S UNIVERSITY.
+            </motion.p>
+          </div>
 
-          <motion.p
-            className="text-base md:text-lg leading-relaxed font-light max-w-2xl"
-            style={{ fontFamily: "Inter, sans-serif", color: "#2b2d42", opacity: 0.65 }}
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            PASSIONATE ABOUT FRONT-END DEVELOPMENT, THOUGHTFUL UI, AND BUILDING
-            PRODUCTS THAT PEOPLE ENJOY USING.
-          </motion.p>
+          <div style={{ overflow: "hidden" }}>
+            <motion.p
+              className="text-base md:text-lg leading-relaxed font-light max-w-2xl"
+              style={{ fontFamily: "Inter, sans-serif", color: "#2b2d42", opacity: 0.65 }}
+              initial={{ clipPath: "inset(0 0 100% 0)" }}
+              whileInView={{ clipPath: "inset(0 0 0% 0)" }}
+              transition={{ duration: 0.7, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              viewport={{ once: true, margin: "-100px" }}
+            >
+              PASSIONATE ABOUT FRONT-END DEVELOPMENT, THOUGHTFUL UI, AND BUILDING
+              PRODUCTS THAT PEOPLE ENJOY USING.
+            </motion.p>
+          </div>
 
           {/* Decorative circle */}
           <motion.div

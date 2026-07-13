@@ -43,18 +43,20 @@ export default function ContactSection({ sectionId }: { sectionId?: string }) {
         </motion.div>
 
         {/* Contact text */}
-        <motion.p
-          className="text-xl md:text-2xl lg:text-3xl leading-relaxed font-light max-w-3xl mb-16"
-          style={{ color: "#2b2d42", fontFamily: "Inter, sans-serif" }}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
+        <div style={{ overflow: "hidden" }}>
+          <motion.p
+            className="text-xl md:text-2xl lg:text-3xl leading-relaxed font-light max-w-3xl mb-16"
+            style={{ color: "#2b2d42", fontFamily: "Inter, sans-serif" }}
+            initial={{ clipPath: "inset(0 0 100% 0)" }}
+            whileInView={{ clipPath: "inset(0 0 0% 0)" }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true }}
+          >
           LOOKING FOR INTERNSHIP &amp; CO-OP OPPORTUNITIES IN
           SOFTWARE ENGINEERING, FRONT-END DEVELOPMENT, AND CREATIVE TECHNOLOGY.
           IF MY WORK RESONATES WITH YOU, I&apos;D LOVE TO HEAR FROM YOU.
         </motion.p>
+        </div>
 
         {/* Contact name */}
         <motion.p
