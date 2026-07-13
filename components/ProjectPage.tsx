@@ -11,6 +11,7 @@ interface ProjectPageProps {
   bgColor: string;
   accentColor: string;
   circleColor: string;
+  sectionId?: string;
   children?: ReactNode;
 }
 
@@ -22,10 +23,12 @@ export default function ProjectPage({
   bgColor,
   accentColor,
   circleColor,
+  sectionId,
   children,
 }: ProjectPageProps) {
   return (
     <section
+      id={sectionId}
       className="relative w-full min-h-screen overflow-hidden flex items-center"
       style={{ backgroundColor: bgColor, backfaceVisibility: "hidden" }}
     >

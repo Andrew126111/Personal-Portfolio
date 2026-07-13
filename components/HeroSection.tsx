@@ -72,12 +72,13 @@ function FidgetOrb({ color, size, baseX, baseY, label }: { color: string; size: 
   );
 }
 
-export default function HeroSection({ onAboutClick }: { onAboutClick: () => void }) {
+export default function HeroSection({ onAboutClick, sectionId }: { onAboutClick: () => void; sectionId?: string }) {
   const sectionRef = useRef<HTMLDivElement>(null);
 
   return (
     <section
       ref={sectionRef}
+      id={sectionId}
       className="relative min-h-screen w-full overflow-hidden"
       style={{ backgroundColor: "#fef9ff" }}
     >

@@ -2,9 +2,9 @@
 
 import { motion } from "framer-motion";
 
-export default function ContactSection() {
+export default function ContactSection({ sectionId }: { sectionId?: string }) {
   return (
-    <section className="relative w-full overflow-hidden" style={{ backgroundColor: "#ffffff", backfaceVisibility: "hidden" }}>
+    <section id={sectionId} className="relative w-full overflow-hidden" style={{ backgroundColor: "#ffffff", backfaceVisibility: "hidden" }}>
       {/* Expanding circle background */}
       <motion.div
         className="absolute rounded-full"

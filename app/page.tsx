@@ -11,6 +11,7 @@ import ProjectPage from "@/components/ProjectPage";
 import ContactSection from "@/components/ContactSection";
 import PageTransition from "@/components/PageTransition";
 import ParallaxSection from "@/components/ParallaxSection";
+import ScrollIndicator from "@/components/ScrollIndicator";
 
 const projects = [
   {
@@ -70,14 +71,16 @@ export default function Home() {
           <HeaderLogo />
           <CustomCursor loaded={loaded} />
           <PageTransition active={transitioning} />
+          <ScrollIndicator sectionIds={["hero", "project-1", "project-2", "project-3", "contact"]} />
 
           <SmoothScroll>
-            <HeroSection onAboutClick={handleAboutClick} />
+            <HeroSection sectionId="hero" onAboutClick={handleAboutClick} />
 
             {projects.map((p, i) => (
               <ParallaxSection key={p.num} speed={0.2 + i * 0.1}>
                 <div style={i > 0 ? { marginTop: "-2px" } : undefined}>
                   <ProjectPage
+                    sectionId={`project-${i + 1}`}
                     num={p.num}
                     title={p.title}
                     description={p.description}
@@ -91,7 +94,7 @@ export default function Home() {
             ))}
 
             <ParallaxSection speed={0.15}>
-              <ContactSection />
+              <ContactSection sectionId="contact" />
             </ParallaxSection>
           </SmoothScroll>
         </>
