@@ -1,12 +1,16 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useTransform } from "framer-motion";
-import { useElementProgress } from "@/hooks/useScrollProgress";
+import { motion, useTransform, useMotionValue } from "framer-motion";
+import { useElementProgress, useCameraY, useDriftX, useDriftY, useSmoothRotate, useTime } from "@/hooks/useScrollProgress";
 
 export default function ContactSection({ sectionId }: { sectionId?: string }) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const sectionProgress = useElementProgress(sectionId ?? "contact");
+  const cameraY = useCameraY();
+  const fallbackCam = useMotionValue(0);
+  const safeCamY = cameraY ?? fallbackCam;
+  const time = useTime();
 
   const bgOpacity = useTransform(sectionProgress, [0, 0.2, 0.8, 1], [0.3, 1, 1, 0.3]);
   const headingOpacity = useTransform(sectionProgress, [0, 0.15], [0, 1]);
@@ -22,13 +26,29 @@ export default function ContactSection({ sectionId }: { sectionId?: string }) {
   const cardOpacity = useTransform(sectionProgress, [0.4, 0.6], [0, 1]);
   const cardX = useTransform(sectionProgress, [0.4, 0.6], [-30, 0]);
 
+  // Floating circle: drift + parallax + rotation + pulse
+  const circleDriftX = useDriftX(35, 0.02);
+  const circleDriftY = useDriftY(20, 0.03);
+  const circleRotate = useSmoothRotate(1.2);
+  const circlePulse = useTransform(time, (t: number) => 0.9 + Math.sin(t * 0.02) * 0.1);
+  const circleParallax = useTransform(safeCamY, (y: number) => -y * 0.02);
+  const circleY = useTransform([circleDriftY, circleParallax], ([d, p]: number[]) => d + p);
+
+  // Independent scroll transforms for text elements
+  const headingParallax = useTransform(safeCamY, (y: number) => -y * 0.006);
+  const bodyParallax = useTransform(safeCamY, (y: number) => y * 0.008);
+  const nameParallax = useTransform(safeCamY, (y: number) => -y * 0.01);
+
+  // Card subtle rotation animation based on scroll
+  const cardRotate = useTransform(sectionProgress, [0.4, 0.6, 0.8], [-8, -4, -2]);
+
   return (
     <section
       ref={sectionRef}
       id={sectionId}
       className="relative w-full overflow-hidden py-24 md:py-36"
     >
-      {/* Expanding circle background */}
+      {/* Expanding circle background — with drift + parallax + rotation + pulse */}
       <motion.div
         className="absolute rounded-full pointer-events-none"
         style={{
@@ -36,24 +56,39 @@ export default function ContactSection({ sectionId }: { sectionId?: string }) {
           top: "-20%", right: "-10%",
           backgroundColor: "#ff6b9d",
           opacity: useTransform(bgOpacity, [0.3, 1], [0, 0.1]),
+          x: circleDriftX,
+          y: circleY,
+          rotate: circleRotate,
+          scale: circlePulse,
         }}
       />
 
       <div className="relative z-10 max-w-6xl mx-auto px-8 md:px-16">
-        {/* Section heading */}
+        {/* Section heading — with parallax */}
         <motion.div
           className="flex items-center gap-2 mb-12 md:mb-20"
-          style={{ fontFamily: "Six Caps, sans-serif", fontSize: 36, color: "#2b2d42", opacity: headingOpacity }}
+          style={{
+            fontFamily: "Six Caps, sans-serif",
+            fontSize: 36,
+            color: "#2b2d42",
+            opacity: headingOpacity,
+            y: headingParallax,
+          }}
         >
           <span>・</span>
           <span style={{ color: "#e84a5f" }}>GET IN TOUCH</span>
         </motion.div>
 
-        {/* Contact text */}
+        {/* Contact text — with parallax */}
         <div style={{ overflow: "hidden" }}>
           <motion.p
             className="text-xl md:text-2xl lg:text-3xl leading-relaxed font-light max-w-3xl mb-16"
-            style={{ color: "#2b2d42", fontFamily: "Inter, sans-serif", clipPath: bodyClip }}
+            style={{
+              color: "#2b2d42",
+              fontFamily: "Inter, sans-serif",
+              clipPath: bodyClip,
+              x: bodyParallax,
+            }}
           >
           LOOKING FOR INTERNSHIP &amp; CO-OP OPPORTUNITIES IN
           SOFTWARE ENGINEERING, FRONT-END DEVELOPMENT, AND CREATIVE TECHNOLOGY.
@@ -61,7 +96,7 @@ export default function ContactSection({ sectionId }: { sectionId?: string }) {
         </motion.p>
         </div>
 
-        {/* Contact name */}
+        {/* Contact name — with parallax */}
         <motion.p
           className="text-6xl md:text-8xl lg:text-9xl leading-none mb-16"
           style={{
@@ -70,6 +105,7 @@ export default function ContactSection({ sectionId }: { sectionId?: string }) {
             transformOrigin: "left",
             opacity: nameOpacity,
             scaleX: nameScale,
+            y: nameParallax,
           }}
         >
           NGUYEN
@@ -126,16 +162,16 @@ export default function ContactSection({ sectionId }: { sectionId?: string }) {
           AVAILABLE FOR INTERNSHIPS &middot; SUMMER 2025 &middot; OPEN TO RELOCATION
         </motion.p>
 
-        {/* Contact card */}
+        {/* Contact card — animated rotation + parallax */}
         <motion.div
           className="app-card-wrapper"
           data-cursor="magnetic"
           style={{
             backgroundColor: "#ffb3a6",
-            rotate: -6,
             position: "relative",
             opacity: cardOpacity,
             x: cardX,
+            rotate: cardRotate,
           }}
         >
           <a

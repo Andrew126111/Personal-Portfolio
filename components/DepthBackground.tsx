@@ -86,11 +86,36 @@ function GradientBlob({ index, depth, size, initialX, initialY, blur, chapterBle
 
 function TypographyLayer({ depth, chapterBlend }: { depth: number; chapterBlend: any }) {
   const ctx = useSmoothScroll();
+  const cursorCtx = useCursor();
   const cameraY = ctx?.cameraY;
   const y = cameraY ? useTransform(cameraY, (v: number) => -v * depth) : 0;
   const driftX = useDriftX(15, 0.04);
   const driftY = useDriftY(8, 0.03);
   const rotate = useSmoothRotate(1.2);
+
+  const fallbackCX = useMotionValue(0);
+  const fallbackCY = useMotionValue(0);
+  const cursorX = cursorCtx?.cursorX ?? fallbackCX;
+  const cursorY = cursorCtx?.cursorY ?? fallbackCY;
+
+  const [vp, setVp] = useState({ w: 0, h: 0 });
+
+  useEffect(() => {
+    setVp({ w: window.innerWidth, h: window.innerHeight });
+    const handle = () => setVp({ w: window.innerWidth, h: window.innerHeight });
+    window.addEventListener("resize", handle);
+    return () => window.removeEventListener("resize", handle);
+  }, []);
+
+  const rotateY = useTransform(cursorX, (x: number) => {
+    if (vp.w === 0) return 0;
+    return ((x - vp.w / 2) / (vp.w / 2)) * 0.3;
+  });
+
+  const rotateX = useTransform(cursorY, (y: number) => {
+    if (vp.h === 0) return 0;
+    return ((y - vp.h / 2) / (vp.h / 2)) * -0.3;
+  });
 
   const opacity = useTransform(chapterBlend, (blend: any) => {
     if (!blend) return anOpacity[0];
@@ -106,7 +131,16 @@ function TypographyLayer({ depth, chapterBlend }: { depth: number; chapterBlend:
   return (
     <motion.div
       className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
-      style={{ y, x: driftX, rotate, willChange: "transform" }}
+      style={{
+        y,
+        x: driftX,
+        rotate,
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+        perspective: 800,
+        willChange: "transform",
+      }}
     >
       <motion.span
         className="leading-none"

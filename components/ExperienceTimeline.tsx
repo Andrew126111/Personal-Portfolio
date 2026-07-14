@@ -1,8 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useTransform } from "framer-motion";
-import { useElementProgress } from "@/hooks/useScrollProgress";
+import { motion, useTransform, useMotionValue } from "framer-motion";
+import { useElementProgress, useCameraY, useDriftX, useDriftY, useTime } from "@/hooks/useScrollProgress";
 
 const timeline = [
   {
@@ -34,8 +34,15 @@ const timeline = [
 export default function ExperienceTimeline({ sectionId }: { sectionId?: string }) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const sectionProgress = useElementProgress(sectionId ?? "experience");
+  const cameraY = useCameraY();
+  const fallbackCam = useMotionValue(0);
+  const safeCamY = cameraY ?? fallbackCam;
 
   const headingOpacity = useTransform(sectionProgress, [0, 0.15], [0, 1]);
+  const headingParallax = useTransform(safeCamY, (y: number) => -y * 0.006);
+
+  // Vertical line grows from top as section scrolls
+  const lineScaleY = useTransform(sectionProgress, [0, 0.9], [0, 1]);
 
   return (
     <section
@@ -47,7 +54,13 @@ export default function ExperienceTimeline({ sectionId }: { sectionId?: string }
         {/* Section heading */}
         <motion.div
           className="flex items-center gap-2 mb-16 md:mb-20"
-          style={{ fontFamily: "Six Caps, sans-serif", fontSize: 36, color: "#2b2d42", opacity: headingOpacity }}
+          style={{
+            fontFamily: "Six Caps, sans-serif",
+            fontSize: 36,
+            color: "#2b2d42",
+            opacity: headingOpacity,
+            y: headingParallax,
+          }}
         >
           <span>・</span>
           <span>EXPERIENCE</span>
@@ -55,14 +68,19 @@ export default function ExperienceTimeline({ sectionId }: { sectionId?: string }
 
         {/* Timeline */}
         <div className="relative">
-          {/* Vertical line */}
-          <div
+          {/* Vertical line — grows from top */}
+          <motion.div
             className="absolute left-[60px] md:left-[80px] top-0 bottom-0 w-px"
-            style={{ backgroundColor: "#2b2d42", opacity: 0.1 }}
+            style={{
+              backgroundColor: "#2b2d42",
+              opacity: 0.1,
+              scaleY: lineScaleY,
+              transformOrigin: "top",
+            }}
           />
 
           {timeline.map((item, i) => (
-            <TimelineItem key={item.year} item={item} index={i} sectionProgress={sectionProgress} />
+            <TimelineItem key={item.year} item={item} index={i} sectionProgress={sectionProgress} safeCamY={safeCamY} />
           ))}
         </div>
       </div>
@@ -70,17 +88,30 @@ export default function ExperienceTimeline({ sectionId }: { sectionId?: string }
   );
 }
 
-function TimelineItem({ item, index, sectionProgress }: {
+function TimelineItem({ item, index, sectionProgress, safeCamY }: {
   item: typeof timeline[0];
   index: number;
   sectionProgress: any;
+  safeCamY: any;
 }) {
   const startOffset = 0.08 + index * 0.18;
   const endOffset = startOffset + 0.15;
+  const time = useTime();
 
   const itemOpacity = useTransform(sectionProgress, [startOffset, endOffset], [0, 1]);
-  const itemY = useTransform(sectionProgress, [startOffset, endOffset], [20, 0]);
+  const itemY = useTransform(sectionProgress, [startOffset, endOffset], [30, 0]);
   const dotScale = useTransform(sectionProgress, [startOffset, startOffset + 0.02], [0, 1]);
+
+  // Independent parallax: year moves differently than content
+  const yearParallax = useTransform(safeCamY, (y: number) => -y * (0.006 + index * 0.002));
+  const titleParallax = useTransform(safeCamY, (y: number) => y * 0.008);
+  const descParallax = useTransform(safeCamY, (y: number) => -y * 0.004);
+
+  // Continuous subtle glow pulse on dot after reveal
+  const dotGlow = useTransform(time, (t: number) => {
+    if (sectionProgress.get() < startOffset) return 0.5;
+    return 0.5 + Math.sin(t * 0.04 + index) * 0.5;
+  });
 
   return (
     <motion.div
@@ -99,6 +130,7 @@ function TimelineItem({ item, index, sectionProgress }: {
             backgroundColor: item.color,
             zIndex: 2,
             scale: dotScale,
+            boxShadow: useTransform(dotGlow, (g: number) => `0 0 ${8 + g * 6}px ${item.color}40`),
           }}
         />
         <span
@@ -117,20 +149,25 @@ function TimelineItem({ item, index, sectionProgress }: {
       </div>
 
       {/* Content */}
-      <div className="flex-1 pt-1">
+      <motion.div className="flex-1 pt-1" style={{ y: titleParallax }}>
         <h3
           className="text-xl md:text-2xl lg:text-3xl tracking-[0.05em] mb-2"
           style={{ fontFamily: "Six Caps, sans-serif", color: "#2b2d42" }}
         >
           {item.title}
         </h3>
-        <p
+        <motion.p
           className="text-sm md:text-base leading-relaxed font-light max-w-lg"
-          style={{ fontFamily: "Inter, sans-serif", color: "#2b2d42", opacity: 0.6 }}
+          style={{
+            fontFamily: "Inter, sans-serif",
+            color: "#2b2d42",
+            opacity: 0.6,
+            x: descParallax,
+          }}
         >
           {item.description}
-        </p>
-      </div>
+        </motion.p>
+      </motion.div>
     </motion.div>
   );
 }

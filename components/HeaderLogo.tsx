@@ -1,12 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useDriftX, useSmoothRotate } from "@/hooks/useScrollProgress";
 
 const letters = "ANDREW NGUYEN".split("");
 
 export default function HeaderLogo() {
+  const driftX = useDriftX(4, 0.02);
+  const rotate = useSmoothRotate(0.3);
+
   return (
-    <div
+    <motion.div
       className="fixed top-8 left-8 z-40 select-none"
       style={{
         fontFamily: "Six Caps, sans-serif",
@@ -15,6 +19,8 @@ export default function HeaderLogo() {
         letterSpacing: "0.12em",
         textRendering: "optimizeLegibility",
         WebkitFontSmoothing: "antialiased",
+        x: driftX,
+        rotate,
       }}
     >
       {letters.map((letter, i) => (
@@ -29,6 +35,6 @@ export default function HeaderLogo() {
           <span className="inline-block">{letter === " " ? "\u00A0" : letter}</span>
         </motion.span>
       ))}
-    </div>
+    </motion.div>
   );
 }
