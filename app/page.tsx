@@ -4,7 +4,8 @@ import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import LoadingScreen from "@/components/LoadingScreen";
 import HeaderLogo from "@/components/HeaderLogo";
-import CustomCursor from "@/components/CustomCursor";
+import { CursorProvider } from "@/components/CursorContext";
+import PremiumCursor from "@/components/PremiumCursor";
 import SmoothScroll from "@/components/SmoothScroll";
 import HeroSection from "@/components/HeroSection";
 import WhoAmI from "@/components/WhoAmI";
@@ -13,9 +14,8 @@ import SkillsSection from "@/components/SkillsSection";
 import ExperienceTimeline from "@/components/ExperienceTimeline";
 import ContactSection from "@/components/ContactSection";
 import PageTransition from "@/components/PageTransition";
-import ParallaxSection from "@/components/ParallaxSection";
 import ChapterNav from "@/components/ChapterNav";
-import WatermarkBackground from "@/components/WatermarkBackground";
+import DepthBackground from "@/components/DepthBackground";
 
 const projects = [
   {
@@ -82,19 +82,19 @@ export default function Home() {
 
       {loaded && (
         <>
+          <CursorProvider>
           <HeaderLogo />
-          <CustomCursor loaded={loaded} />
+          <PremiumCursor loaded={loaded} />
           <ChapterNav />
-          <WatermarkBackground />
           <PageTransition active={transitioning} />
 
-          <SmoothScroll>
+          <SmoothScroll background={<DepthBackground />}>
             <HeroSection sectionId="hero" onAboutClick={handleAboutClick} />
 
             <WhoAmI sectionId="whoami" />
 
             {projects.map((p, i) => (
-              <div key={p.num} style={i > 0 ? { marginTop: "-2px" } : undefined}>
+              <div key={p.num}>
                 <ProjectPage
                   sectionId={`project-${i + 1}`}
                   num={p.num}
@@ -108,6 +108,7 @@ export default function Home() {
                   <div className="flex flex-wrap gap-6">
                     <a
                       href="#"
+                      data-cursor="link"
                       className="text-sm tracking-[0.15em] hover:opacity-60 transition-opacity"
                       style={{ fontFamily: "Inter, sans-serif", color: p.accentColor }}
                     >
@@ -115,6 +116,7 @@ export default function Home() {
                     </a>
                     <a
                       href="#"
+                      data-cursor="link"
                       className="text-sm tracking-[0.15em] hover:opacity-60 transition-opacity"
                       style={{ fontFamily: "Inter, sans-serif", color: p.accentColor }}
                     >
@@ -131,6 +133,7 @@ export default function Home() {
 
             <ContactSection sectionId="contact" />
           </SmoothScroll>
+          </CursorProvider>
         </>
       )}
     </>

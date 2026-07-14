@@ -1,7 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useTransform } from "framer-motion";
 import { ReactNode } from "react";
+import { useElementProgress } from "@/hooks/useScrollProgress";
 
 interface ProjectPageProps {
   num: string;
@@ -20,90 +22,74 @@ export default function ProjectPage({
   title,
   description,
   tags,
-  bgColor,
   accentColor,
   circleColor,
   sectionId,
   children,
 }: ProjectPageProps) {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const sectionProgress = useElementProgress(sectionId ?? "");
+
+  const bgOpacity = useTransform(sectionProgress, [0, 0.15, 0.85, 1], [0.3, 1, 1, 0.3]);
+  const numOpacity = useTransform(sectionProgress, [0.05, 0.25, 0.5, 0.8, 0.9], [0, 1, 1, 1, 0]);
+  const titleClip = useTransform(
+    sectionProgress,
+    [0.1, 0.35],
+    ["inset(0 0 100% 0)", "inset(0 0 0% 0)"]
+  );
+  const descOpacity = useTransform(sectionProgress, [0.2, 0.4, 0.7, 0.85], [0, 1, 1, 0]);
+  const tagsOpacity = useTransform(sectionProgress, [0.25, 0.45, 0.65, 0.8], [0, 1, 1, 0]);
+  const lineScale = useTransform(sectionProgress, [0.3, 0.5, 0.6, 0.75], [0, 1, 1, 0]);
+
   return (
     <section
+      ref={sectionRef}
       id={sectionId}
-      className="relative w-full min-h-screen overflow-hidden flex items-center"
-      style={{ backgroundColor: bgColor, backfaceVisibility: "hidden" }}
+      className="relative w-full overflow-hidden py-24 md:py-32"
     >
-      {/* Decorative circles */}
+      {/* Decorative circles fade in/out with section */}
       <motion.div
         className="absolute rounded-full pointer-events-none"
         style={{
-          width: 600,
-          height: 600,
-          top: "-15%",
-          right: "-10%",
+          width: 600, height: 600,
+          top: "-15%", right: "-10%",
           backgroundColor: circleColor,
-          opacity: 0.12,
+          opacity: useTransform(bgOpacity, [0.3, 1], [0, 0.12]),
         }}
-        initial={{ scale: 0 }}
-        whileInView={{ scale: 1 }}
-        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-        viewport={{ once: true }}
       />
       <motion.div
         className="absolute rounded-full pointer-events-none"
         style={{
-          width: 300,
-          height: 300,
-          bottom: "10%",
-          left: "5%",
+          width: 300, height: 300,
+          bottom: "10%", left: "5%",
           backgroundColor: circleColor,
-          opacity: 0.08,
+          opacity: useTransform(bgOpacity, [0.3, 1], [0, 0.08]),
         }}
-        initial={{ scale: 0 }}
-        whileInView={{ scale: 1 }}
-        transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-        viewport={{ once: true }}
       />
 
-      <motion.div
-        className="relative z-10 w-full"
-        initial={{ clipPath: "inset(5% 0% 5% 0%)" }}
-        whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        viewport={{ once: true, margin: "-100px" }}
-      >
-      <div className="max-w-6xl mx-auto px-8 md:px-16 py-24 md:py-32">
+      <div className="relative z-10 max-w-6xl mx-auto px-8 md:px-16">
         {/* Number */}
         <motion.div
           className="mb-6 md:mb-10 text-6xl md:text-8xl leading-none"
-          style={{ fontFamily: "Six Caps, sans-serif", color: accentColor }}
-          initial={{ opacity: 0, x: -30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+          style={{ fontFamily: "Six Caps, sans-serif", color: accentColor, opacity: numOpacity }}
         >
           {num}
         </motion.div>
 
         {/* Title */}
-        <motion.h2
-          className="text-5xl md:text-7xl lg:text-8xl leading-[0.9] mb-6 md:mb-8"
-          style={{ fontFamily: "Six Caps, sans-serif", color: "#2b2d42" }}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-          viewport={{ once: true }}
-        >
-          {title}
-        </motion.h2>
+        <div style={{ overflow: "hidden" }}>
+          <motion.h2
+            className="text-5xl md:text-7xl lg:text-8xl leading-[0.9] mb-6 md:mb-8"
+            style={{ fontFamily: "Six Caps, sans-serif", color: "#2b2d42", clipPath: titleClip }}
+          >
+            {title}
+          </motion.h2>
+        </div>
 
         {/* Description */}
         <motion.p
           className="text-base md:text-lg lg:text-xl leading-relaxed max-w-2xl mb-8 font-light"
-          style={{ fontFamily: "Inter, sans-serif", color: "#2b2d42" }}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          viewport={{ once: true }}
+          style={{ fontFamily: "Inter, sans-serif", color: "#2b2d42", opacity: descOpacity }}
         >
           {description}
         </motion.p>
@@ -111,10 +97,7 @@ export default function ProjectPage({
         {/* Tags */}
         <motion.div
           className="flex flex-wrap gap-3 mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          viewport={{ once: true }}
+          style={{ opacity: tagsOpacity }}
         >
           {tags.map((tag) => (
             <span
@@ -134,12 +117,7 @@ export default function ProjectPage({
 
         {/* Children (links, extra content) */}
         {children && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            viewport={{ once: true }}
-          >
+          <motion.div style={{ opacity: tagsOpacity }}>
             {children}
           </motion.div>
         )}
@@ -147,11 +125,7 @@ export default function ProjectPage({
         {/* Decorative line */}
         <motion.div
           className="mt-12 md:mt-16 w-full max-w-xl"
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          viewport={{ once: true }}
-          style={{ transformOrigin: "left" }}
+          style={{ transformOrigin: "left", scaleX: lineScale }}
         >
           <svg viewBox="0 0 600 60" fill="none">
             <path
@@ -163,7 +137,6 @@ export default function ProjectPage({
           </svg>
         </motion.div>
       </div>
-      </motion.div>
     </section>
   );
 }

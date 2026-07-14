@@ -1,6 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useTransform } from "framer-motion";
+import { useElementProgress } from "@/hooks/useScrollProgress";
 
 const timeline = [
   {
@@ -30,38 +32,22 @@ const timeline = [
 ];
 
 export default function ExperienceTimeline({ sectionId }: { sectionId?: string }) {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const sectionProgress = useElementProgress(sectionId ?? "experience");
+
+  const headingOpacity = useTransform(sectionProgress, [0, 0.15], [0, 1]);
+
   return (
     <section
+      ref={sectionRef}
       id={sectionId}
-      className="relative w-full overflow-hidden"
-      style={{ backgroundColor: "#fef9ff", backfaceVisibility: "hidden" }}
+      className="relative w-full overflow-hidden py-24 md:py-36"
     >
-      {/* Background circle */}
-      <motion.div
-        className="absolute rounded-full pointer-events-none"
-        style={{
-          width: 600,
-          height: 600,
-          bottom: "-20%",
-          right: "-10%",
-          backgroundColor: "#6bcbff",
-          opacity: 0.06,
-        }}
-        initial={{ scale: 0 }}
-        whileInView={{ scale: 1 }}
-        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-        viewport={{ once: true }}
-      />
-
-      <div className="relative z-10 max-w-6xl mx-auto px-8 md:px-16 py-32 md:py-40">
+      <div className="relative z-10 max-w-6xl mx-auto px-8 md:px-16">
         {/* Section heading */}
         <motion.div
           className="flex items-center gap-2 mb-16 md:mb-20"
-          style={{ fontFamily: "Six Caps, sans-serif", fontSize: 36, color: "#2b2d42" }}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
+          style={{ fontFamily: "Six Caps, sans-serif", fontSize: 36, color: "#2b2d42", opacity: headingOpacity }}
         >
           <span>・</span>
           <span>EXPERIENCE</span>
@@ -76,61 +62,75 @@ export default function ExperienceTimeline({ sectionId }: { sectionId?: string }
           />
 
           {timeline.map((item, i) => (
-            <motion.div
-              key={item.year}
-              className="relative flex items-start gap-6 md:gap-10 pb-16 md:pb-20 last:pb-0"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: i * 0.15 }}
-              viewport={{ once: true, margin: "-80px" }}
-            >
-              {/* Year with dot */}
-              <div className="relative flex items-center justify-center shrink-0" style={{ width: 120, height: 40 }}>
-                {/* Dot */}
-                <div
-                  className="absolute rounded-full"
-                  style={{
-                    width: 12,
-                    height: 12,
-                    left: 54,
-                    backgroundColor: item.color,
-                    zIndex: 2,
-                  }}
-                />
-                <span
-                  className="text-lg md:text-xl tracking-[0.15em]"
-                  style={{
-                    fontFamily: "Six Caps, sans-serif",
-                    color: item.color,
-                    position: "absolute",
-                    left: 0,
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                  }}
-                >
-                  {item.year}
-                </span>
-              </div>
-
-              {/* Content */}
-              <div className="flex-1 pt-1">
-                <h3
-                  className="text-xl md:text-2xl lg:text-3xl tracking-[0.05em] mb-2"
-                  style={{ fontFamily: "Six Caps, sans-serif", color: "#2b2d42" }}
-                >
-                  {item.title}
-                </h3>
-                <p
-                  className="text-sm md:text-base leading-relaxed font-light max-w-lg"
-                  style={{ fontFamily: "Inter, sans-serif", color: "#2b2d42", opacity: 0.6 }}
-                >
-                  {item.description}
-                </p>
-              </div>
-            </motion.div>
+            <TimelineItem key={item.year} item={item} index={i} sectionProgress={sectionProgress} />
           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+function TimelineItem({ item, index, sectionProgress }: {
+  item: typeof timeline[0];
+  index: number;
+  sectionProgress: any;
+}) {
+  const startOffset = 0.08 + index * 0.18;
+  const endOffset = startOffset + 0.15;
+
+  const itemOpacity = useTransform(sectionProgress, [startOffset, endOffset], [0, 1]);
+  const itemY = useTransform(sectionProgress, [startOffset, endOffset], [20, 0]);
+  const dotScale = useTransform(sectionProgress, [startOffset, startOffset + 0.02], [0, 1]);
+
+  return (
+    <motion.div
+      className="relative flex items-start gap-6 md:gap-10 pb-16 md:pb-20 last:pb-0"
+      style={{ opacity: itemOpacity, y: itemY }}
+    >
+      {/* Year with dot */}
+      <div className="relative flex items-center justify-center shrink-0" style={{ width: 120, height: 40 }}>
+        {/* Dot */}
+        <motion.div
+          className="absolute rounded-full"
+          style={{
+            width: 12,
+            height: 12,
+            left: 54,
+            backgroundColor: item.color,
+            zIndex: 2,
+            scale: dotScale,
+          }}
+        />
+        <span
+          className="text-lg md:text-xl tracking-[0.15em]"
+          style={{
+            fontFamily: "Six Caps, sans-serif",
+            color: item.color,
+            position: "absolute",
+            left: 0,
+            top: "50%",
+            transform: "translateY(-50%)",
+          }}
+        >
+          {item.year}
+        </span>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 pt-1">
+        <h3
+          className="text-xl md:text-2xl lg:text-3xl tracking-[0.05em] mb-2"
+          style={{ fontFamily: "Six Caps, sans-serif", color: "#2b2d42" }}
+        >
+          {item.title}
+        </h3>
+        <p
+          className="text-sm md:text-base leading-relaxed font-light max-w-lg"
+          style={{ fontFamily: "Inter, sans-serif", color: "#2b2d42", opacity: 0.6 }}
+        >
+          {item.description}
+        </p>
+      </div>
+    </motion.div>
   );
 }

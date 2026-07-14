@@ -45,6 +45,7 @@ export default function AboutCard({ onNavigate }: AboutCardProps) {
 
   return (
     <motion.div
+      data-cursor="magnetic"
       style={{
         x,
         y,

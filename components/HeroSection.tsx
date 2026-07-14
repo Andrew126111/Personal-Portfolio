@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { motion, useMotionValue, animate } from "framer-motion";
+import { motion, useMotionValue, animate, useTransform } from "framer-motion";
 import AboutCard from "./AboutCard";
+import { useElementProgress } from "@/hooks/useScrollProgress";
 
 const skillTags = [
   "REACT", "NEXT.JS", "TYPESCRIPT", "CSS", "PYTHON",
@@ -27,6 +28,7 @@ function FidgetOrb({ color, size, baseX, baseY, label }: { color: string; size: 
   return (
     <motion.div
       className="absolute rounded-full cursor-grab active:cursor-grabbing flex items-center justify-center"
+      data-cursor="drag"
       style={{
         width: size,
         height: size,
@@ -74,76 +76,39 @@ function FidgetOrb({ color, size, baseX, baseY, label }: { color: string; size: 
 
 export default function HeroSection({ onAboutClick, sectionId }: { onAboutClick: () => void; sectionId?: string }) {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const sectionProgress = useElementProgress(sectionId ?? "hero");
+
+  const nameClip = useTransform(
+    sectionProgress,
+    [0, 0.35],
+    ["inset(0 0 100% 0)", "inset(0 0 0% 0)"]
+  );
+  const topTextOpacity = useTransform(sectionProgress, [0, 0.2], [0, 1]);
+  const subtitleOpacity = useTransform(sectionProgress, [0.1, 0.3], [0, 1]);
+  const bioOpacity = useTransform(sectionProgress, [0.2, 0.5], [0, 1]);
+  const bioY = useTransform(sectionProgress, [0.2, 0.5], [20, 0]);
+  const tagsOpacity = useTransform(sectionProgress, [0.3, 0.6], [0, 1]);
 
   return (
     <section
       ref={sectionRef}
       id={sectionId}
-      className="relative min-h-screen w-full overflow-hidden"
-      style={{ backgroundColor: "#fef9ff" }}
+      className="relative w-full overflow-hidden py-16 md:py-24"
     >
-      {/* Background watermark */}
-      <div
-        className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
-        style={{ zIndex: 0 }}
-      >
-        <span
-          className="leading-none"
-          style={{
-            fontFamily: "Six Caps, sans-serif",
-            fontSize: "clamp(20rem, 40vw, 40rem)",
-            color: "#2b2d42",
-            opacity: 0.025,
-            letterSpacing: "0.02em",
-            lineHeight: 0.9,
-          }}
-        >
-          AN
-        </span>
-      </div>
-
-      {/* Background circles */}
-      <motion.div
-        className="absolute rounded-full pointer-events-none"
-        style={{ width: 600, height: 600, top: "-15%", right: "-5%", backgroundColor: "#ff6b9d", opacity: 0.08 }}
-        initial={{ scale: 0 }}
-        whileInView={{ scale: 1 }}
-        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-      />
-      <motion.div
-        className="absolute rounded-full pointer-events-none"
-        style={{ width: 450, height: 450, bottom: "5%", left: "0%", backgroundColor: "#ffd93d", opacity: 0.07 }}
-        initial={{ scale: 0 }}
-        whileInView={{ scale: 1 }}
-        transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-      />
-
-      {/* Fidget orbs - interactive floating bubbles */}
-      <FidgetOrb color="#ff6b9d" size={100} baseX="85%" baseY="20%" label="DRAG" />
-      <FidgetOrb color="#6bcbff" size={80} baseX="12%" baseY="70%" label="SQUISH" />
-      <FidgetOrb color="#ffd93d" size={70} baseX="90%" baseY="75%" label="POKE" />
-
-      {/* Hero content */}
-      <div className="relative z-10 flex flex-col justify-center min-h-screen px-8 md:px-16 lg:px-24">
+      <div className="relative z-10 px-8 md:px-16 lg:px-24">
         {/* Top bar */}
         <div className="flex justify-between items-start mb-4 md:mb-6">
           <motion.p
             className="text-lg md:text-2xl lg:text-3xl tracking-[0.3em]"
-            style={{ fontFamily: "Six Caps, sans-serif", color: "#2b2d42" }}
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            style={{ fontFamily: "Six Caps, sans-serif", color: "#2b2d42", opacity: topTextOpacity }}
           >
             CREATIVE
-            </motion.p>
-            <motion.p
-              className="text-lg md:text-2xl lg:text-3xl tracking-[0.15em]"
-              style={{ fontFamily: "Six Caps, sans-serif", color: "#ff6b9d" }}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.15 }}
-            >
-              DEVELOPER
+          </motion.p>
+          <motion.p
+            className="text-lg md:text-2xl lg:text-3xl tracking-[0.15em]"
+            style={{ fontFamily: "Six Caps, sans-serif", color: "#ff6b9d", opacity: topTextOpacity }}
+          >
+            DEVELOPER
           </motion.p>
         </div>
 
@@ -151,10 +116,11 @@ export default function HeroSection({ onAboutClick, sectionId }: { onAboutClick:
         <div style={{ overflow: "hidden" }}>
           <motion.h1
             className="text-[clamp(4rem,15vw,16rem)] leading-[1.05] tracking-wide -ml-1"
-            style={{ fontFamily: "Six Caps, sans-serif", color: "#2b2d42" }}
-            initial={{ clipPath: "inset(0 0 100% 0)" }}
-            whileInView={{ clipPath: "inset(0 0 0% 0)" }}
-            transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              fontFamily: "Six Caps, sans-serif",
+              color: "#2b2d42",
+              clipPath: nameClip,
+            }}
           >
             ANDREW
             <br />
@@ -165,9 +131,7 @@ export default function HeroSection({ onAboutClick, sectionId }: { onAboutClick:
         {/* Sub-text row */}
         <motion.div
           className="flex flex-wrap gap-x-8 gap-y-1 mt-2 md:mt-4"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
+          style={{ opacity: subtitleOpacity }}
         >
           <p className="text-xl md:text-3xl lg:text-4xl tracking-[0.15em]"
              style={{ fontFamily: "Six Caps, sans-serif", color: "#2b2d42" }}>
@@ -180,25 +144,17 @@ export default function HeroSection({ onAboutClick, sectionId }: { onAboutClick:
         </motion.div>
 
         {/* Tagline */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mt-4 md:mt-6 gap-4">
-          <motion.p
-            className="text-xs md:text-sm tracking-[0.25em]"
-            style={{ fontFamily: "Inter, sans-serif", color: "#2b2d42", fontWeight: 300 }}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.7 }}
-          >
-            INTERACTION &middot; MOTION &middot; CODE
-          </motion.p>
-        </div>
+        <motion.p
+          className="block text-xs md:text-sm tracking-[0.25em] mt-4 md:mt-6"
+          style={{ fontFamily: "Inter, sans-serif", color: "#2b2d42", fontWeight: 300, opacity: tagsOpacity }}
+        >
+          INTERACTION &middot; MOTION &middot; CODE
+        </motion.p>
 
         {/* Bio quote */}
         <motion.div
           className="mt-8 md:mt-12 max-w-md pl-4 md:pl-5"
-          style={{ borderLeft: "2px solid #6bcbff" }}
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.9 }}
+          style={{ borderLeft: "2px solid #6bcbff", opacity: bioOpacity, y: bioY }}
         >
           <p
             className="text-sm md:text-base leading-relaxed font-light"
@@ -213,9 +169,7 @@ export default function HeroSection({ onAboutClick, sectionId }: { onAboutClick:
         {/* Skill tags */}
         <motion.div
           className="mt-6 md:mt-8 flex flex-wrap gap-2"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.1 }}
+          style={{ opacity: tagsOpacity }}
         >
           {skillTags.slice(0, 6).map((tag, i) => (
             <span
@@ -234,6 +188,11 @@ export default function HeroSection({ onAboutClick, sectionId }: { onAboutClick:
           ))}
         </motion.div>
       </div>
+
+      {/* Fidget orbs */}
+      <FidgetOrb color="#ff6b9d" size={100} baseX="85%" baseY="20%" label="DRAG" />
+      <FidgetOrb color="#6bcbff" size={80} baseX="12%" baseY="70%" label="SQUISH" />
+      <FidgetOrb color="#ffd93d" size={70} baseX="90%" baseY="75%" label="POKE" />
 
       {/* Draggable About Card */}
       <AboutCard onNavigate={onAboutClick} />

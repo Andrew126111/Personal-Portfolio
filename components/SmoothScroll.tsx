@@ -1,10 +1,14 @@
 "use client";
 
 import { createContext, useContext, useEffect, useRef, useState, useCallback, ReactNode } from "react";
+import { useMotionValue, MotionValue } from "framer-motion";
 
 interface ScrollContextValue {
   currentY: React.MutableRefObject<number>;
   contentHeight: number;
+  scrollProgress: MotionValue<number>;
+  cameraY: MotionValue<number>;
+  scrollVelocity: MotionValue<number>;
 }
 
 const SmoothScrollContext = createContext<ScrollContextValue | null>(null);
@@ -13,36 +17,48 @@ export function useSmoothScroll() {
   return useContext(SmoothScrollContext);
 }
 
-export default function SmoothScroll({ children }: { children: ReactNode }) {
+export default function SmoothScroll({ children, background }: { children: ReactNode; background?: ReactNode }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState(0);
   const currentY = useRef(0);
   const targetY = useRef(0);
   const rafRef = useRef<number>(0);
+  const scrollProgress = useMotionValue(0);
+  const cameraY = useMotionValue(0);
+  const scrollVelocity = useMotionValue(0);
+  const prevYRef = useRef(0);
 
   useEffect(() => {
     if (!contentRef.current) return;
-    const resizeObserver = new ResizeObserver((entries) => {
+    const ro = new ResizeObserver((entries) => {
       for (const entry of entries) {
         setContentHeight(entry.contentRect.height);
       }
     });
-    resizeObserver.observe(contentRef.current);
-    return () => resizeObserver.disconnect();
+    ro.observe(contentRef.current);
+    return () => ro.disconnect();
   }, []);
 
   const update = useCallback(() => {
-    currentY.current += (targetY.current - currentY.current) * 0.08;
+    prevYRef.current = currentY.current;
+    currentY.current += (targetY.current - currentY.current) * 0.06;
+
     const max = Math.max(0, contentHeight - window.innerHeight);
-    currentY.current = Math.min(0, Math.max(-max, currentY.current));
+    const clamped = Math.min(0, Math.max(-max, currentY.current));
+    currentY.current = clamped;
+    const absY = Math.abs(currentY.current);
 
     if (containerRef.current) {
       containerRef.current.style.transform = `translateY(${currentY.current}px)`;
     }
 
+    scrollProgress.set(max > 0 ? absY / max : 0);
+    cameraY.set(absY);
+    scrollVelocity.set(Math.abs(absY - Math.abs(prevYRef.current)));
+
     rafRef.current = requestAnimationFrame(update);
-  }, [contentHeight]);
+  }, [contentHeight, scrollProgress, cameraY, scrollVelocity]);
 
   useEffect(() => {
     rafRef.current = requestAnimationFrame(update);
@@ -54,7 +70,6 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
       e.preventDefault();
       targetY.current -= e.deltaY;
     };
-
     window.addEventListener("wheel", handleWheel, { passive: false });
 
     let touchStartY = 0;
@@ -64,17 +79,13 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
       touchStartY = e.touches[0].clientY;
       isTouching = true;
     };
-
     const handleTouchMove = (e: TouchEvent) => {
       if (!isTouching) return;
       const delta = touchStartY - e.touches[0].clientY;
       touchStartY = e.touches[0].clientY;
       targetY.current -= delta * 0.8;
     };
-
-    const handleTouchEnd = () => {
-      isTouching = false;
-    };
+    const handleTouchEnd = () => { isTouching = false; };
 
     window.addEventListener("touchstart", handleTouchStart, { passive: true });
     window.addEventListener("touchmove", handleTouchMove, { passive: true });
@@ -89,7 +100,8 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <SmoothScrollContext.Provider value={{ currentY, contentHeight }}>
+    <SmoothScrollContext.Provider value={{ currentY, contentHeight, scrollProgress, cameraY, scrollVelocity }}>
+      {background}
       <div style={{ overflow: "hidden", position: "relative", zIndex: 1 }}>
         <div ref={containerRef} style={{ position: "relative", width: "100%" }}>
           <div ref={contentRef}>{children}</div>

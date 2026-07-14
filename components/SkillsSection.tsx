@@ -1,6 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useTransform } from "framer-motion";
+import { useElementProgress } from "@/hooks/useScrollProgress";
 
 const skillGroups = [
   {
@@ -21,44 +23,30 @@ const skillGroups = [
 ];
 
 export default function SkillsSection({ sectionId }: { sectionId?: string }) {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const sectionProgress = useElementProgress(sectionId ?? "skills");
+
+  const headingOpacity = useTransform(sectionProgress, [0, 0.2], [0, 1]);
+  const groupClip = useTransform(
+    sectionProgress,
+    [0.1, 0.4],
+    ["inset(3% 0% 3% 0%)", "inset(0% 0% 0% 0%)"]
+  );
+
   return (
     <section
+      ref={sectionRef}
       id={sectionId}
-      className="relative w-full overflow-hidden flex items-center"
-      style={{ backgroundColor: "#ffffff", backfaceVisibility: "hidden" }}
+      className="relative w-full overflow-hidden py-24 md:py-36"
     >
-      {/* Background circle */}
       <motion.div
-        className="absolute rounded-full pointer-events-none"
-        style={{
-          width: 500,
-          height: 500,
-          top: "-20%",
-          left: "-10%",
-          backgroundColor: "#ffb3a6",
-          opacity: 0.07,
-        }}
-        initial={{ scale: 0 }}
-        whileInView={{ scale: 1 }}
-        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-        viewport={{ once: true }}
-      />
-
-      <motion.div
-        className="relative z-10 w-full max-w-6xl mx-auto px-8 md:px-16 py-32 md:py-40"
-        initial={{ clipPath: "inset(3% 0% 3% 0%)" }}
-        whileInView={{ clipPath: "inset(0% 0% 0% 0%)" }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        viewport={{ once: true, margin: "-100px" }}
+        className="relative z-10 w-full max-w-6xl mx-auto px-8 md:px-16"
+        style={{ clipPath: groupClip }}
       >
         {/* Section heading */}
         <motion.div
           className="flex items-center gap-2 mb-16 md:mb-20"
-          style={{ fontFamily: "Six Caps, sans-serif", fontSize: 36, color: "#2b2d42" }}
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
+          style={{ fontFamily: "Six Caps, sans-serif", fontSize: 36, color: "#2b2d42", opacity: headingOpacity }}
         >
           <span>・</span>
           <span>SKILLS</span>
@@ -69,10 +57,10 @@ export default function SkillsSection({ sectionId }: { sectionId?: string }) {
           {skillGroups.map((group, gi) => (
             <motion.div
               key={group.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 + gi * 0.15 }}
-              viewport={{ once: true }}
+              style={{
+                opacity: useTransform(sectionProgress, [0.1 + gi * 0.1, 0.3 + gi * 0.1], [0, 1]),
+                y: useTransform(sectionProgress, [0.1 + gi * 0.1, 0.3 + gi * 0.1], [20, 0]),
+              }}
             >
               {/* Group label */}
               <div className="flex items-center gap-3 mb-6">
@@ -94,10 +82,18 @@ export default function SkillsSection({ sectionId }: { sectionId?: string }) {
                 {group.items.map((skill, si) => (
                   <motion.div
                     key={skill}
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.4, delay: 0.2 + gi * 0.15 + si * 0.08 }}
-                    viewport={{ once: true }}
+                    style={{
+                      opacity: useTransform(
+                        sectionProgress,
+                        [0.2 + gi * 0.1 + si * 0.05, 0.35 + gi * 0.1 + si * 0.05],
+                        [0, 1]
+                      ),
+                      x: useTransform(
+                        sectionProgress,
+                        [0.2 + gi * 0.1 + si * 0.05, 0.35 + gi * 0.1 + si * 0.05],
+                        [-10, 0]
+                      ),
+                    }}
                   >
                     <span
                       className="text-xl md:text-2xl lg:text-3xl tracking-[0.1em]"

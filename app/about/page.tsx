@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import LoadingScreen from "@/components/LoadingScreen";
 import HeaderLogo from "@/components/HeaderLogo";
-import CustomCursor from "@/components/CustomCursor";
+import { CursorProvider } from "@/components/CursorContext";
+import PremiumCursor from "@/components/PremiumCursor";
 import SmoothScroll from "@/components/SmoothScroll";
-import ParallaxSection from "@/components/ParallaxSection";
-import WatermarkReveal from "@/components/WatermarkReveal";
+import DepthBackground from "@/components/DepthBackground";
 import AboutSection from "@/components/AboutSection";
 import WhyIBuild from "@/components/WhyIBuild";
 import ExperienceTimeline from "@/components/ExperienceTimeline";
@@ -25,35 +25,20 @@ export default function AboutPage() {
 
       {loaded && (
         <>
+          <CursorProvider>
           <HeaderLogo />
-          <CustomCursor loaded={loaded} />
+          <PremiumCursor loaded={loaded} />
 
-          <SmoothScroll>
-            <ParallaxSection speed={0.15}>
-              <WatermarkReveal>
-                <AboutSection />
-              </WatermarkReveal>
-            </ParallaxSection>
+          <SmoothScroll background={<DepthBackground />}>
+            <AboutSection />
 
-            <ParallaxSection speed={0.15}>
-              <WatermarkReveal>
-                <WhyIBuild />
-              </WatermarkReveal>
-            </ParallaxSection>
+            <WhyIBuild />
 
-            <ParallaxSection speed={0.1}>
-              <WatermarkReveal>
-                <ExperienceTimeline />
-              </WatermarkReveal>
-            </ParallaxSection>
+            <ExperienceTimeline />
 
-            <ParallaxSection speed={0.12}>
-              <CurrentlySection />
-            </ParallaxSection>
+            <CurrentlySection />
 
-            <ParallaxSection speed={0.1}>
-              <BeyondCode />
-            </ParallaxSection>
+            <BeyondCode />
 
             {/* Back to Projects CTA */}
             <section className="relative w-full overflow-hidden" style={{ backgroundColor: "#fef9ff", backfaceVisibility: "hidden" }}>
@@ -72,6 +57,7 @@ export default function AboutPage() {
                 </motion.p>
                 <motion.button
                   className="inline-block text-sm tracking-[0.25em] px-8 py-3"
+                  data-cursor="magnetic"
                   style={{
                     fontFamily: "Inter, sans-serif",
                     color: "#ffffff",
@@ -93,6 +79,7 @@ export default function AboutPage() {
               </div>
             </section>
           </SmoothScroll>
+          </CursorProvider>
         </>
       )}
     </>
