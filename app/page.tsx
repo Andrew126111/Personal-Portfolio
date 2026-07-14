@@ -6,7 +6,8 @@ import LoadingScreen from "@/components/LoadingScreen";
 import HeaderLogo from "@/components/HeaderLogo";
 import { CursorProvider } from "@/components/CursorContext";
 import PremiumCursor from "@/components/PremiumCursor";
-import SmoothScroll from "@/components/SmoothScroll";
+import UnifiedScroll from "@/components/UnifiedScroll";
+import { useAnimations } from "@/hooks/useAnimations";
 import HeroSection from "@/components/HeroSection";
 import WhoAmI from "@/components/WhoAmI";
 import ProjectPage from "@/components/ProjectPage";
@@ -65,6 +66,8 @@ export default function Home() {
   const [loaded, setLoaded] = useState(false);
   const [transitioning, setTransitioning] = useState(false);
 
+  useAnimations();
+
   const handleLoadingComplete = useCallback(() => {
     setLoaded(true);
   }, []);
@@ -83,12 +86,13 @@ export default function Home() {
       {loaded && (
         <>
           <CursorProvider>
+          <DepthBackground />
           <HeaderLogo />
           <PremiumCursor loaded={loaded} />
           <ChapterNav />
           <PageTransition active={transitioning} />
 
-          <SmoothScroll background={<DepthBackground />}>
+          <UnifiedScroll>
             <HeroSection sectionId="hero" onAboutClick={handleAboutClick} />
 
             <WhoAmI sectionId="whoami" />
@@ -132,7 +136,7 @@ export default function Home() {
             <ExperienceTimeline sectionId="experience" />
 
             <ContactSection sectionId="contact" />
-          </SmoothScroll>
+          </UnifiedScroll>
           </CursorProvider>
         </>
       )}

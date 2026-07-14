@@ -31,6 +31,14 @@
   --font-sans: "Inter", helvetica, arial, sans-serif;
 }
 
+html.lenis {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
 body {
   background: var(--color-bg);
   color: var(--color-text);
@@ -43,6 +51,17 @@ html {
   overflow: hidden;
 }
 
+/* GSAP-animated elements */
+[data-depth],
+[data-reveal] {
+  will-change: transform;
+}
+
+[data-reveal="clip"] {
+  clip-path: inset(0 0 100% 0);
+}
+
+/* Card styles */
 .app-card-wrapper {
   position: relative;
   overflow: hidden;
